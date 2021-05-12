@@ -23,7 +23,3 @@ To be able to carry out the exercises with minimal friction, it is recommended t
 
 For some exercises the *Webots* simulator will be used. This simulator is not very demanding about hardware or graphics acceleration, working well even with recent Intel integrated GPUs. A computer well-suited for large compilations is recommended, though.
 
-### Further materials
-
-Additional information and materials will be provided during the coming weeks. It is recommended to subscribe to the *Issues* in this repository, as updates will be notified using that channel.
-
