@@ -1,8 +1,8 @@
 with RCL.Nodes;
-with ROSIDL.Static.Tut_Aeic21.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
 
 use RCL;
-use ROSIDL.Static.Tut_Aeic21;
+use ROSIDL.Static.Tutorial_Aeic21;
 
 procedure Epuck_Test is
    Node : Nodes.Node'Class := Nodes.Init ("epuck_test");

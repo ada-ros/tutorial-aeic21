@@ -1,5 +1,5 @@
 with "rcl";
-with "ros2_interfaces_tut_aeic21";
+with "ros2_interfaces_tutorial_aeic21";
 
 project Tut21_Exercises is
 

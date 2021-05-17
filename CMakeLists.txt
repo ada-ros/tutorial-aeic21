@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(tut_aeic21 VERSION 0.1.0)
+project(tutorial_aeic21 VERSION 0.1.0)
 
 find_package(rclada_common REQUIRED)
 ada_begin_package()

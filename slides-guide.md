@@ -57,7 +57,3 @@
 ### tf2 / tf2_ros / rclada_tf2 packages
 
 ### RCL.TF2 API
-
-
-
-## Part 5: parameters (?)
