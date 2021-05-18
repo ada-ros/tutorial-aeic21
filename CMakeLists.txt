@@ -15,7 +15,12 @@ ada_add_executables(
         tut21_exercises # CMake target
         ${PROJECT_SOURCE_DIR}/gpr_exercises
         bin
+        )
 
+ada_add_executables(
+        tut21_solutions # CMake target
+        ${PROJECT_SOURCE_DIR}/gpr_solutions
+        bin
         epuck_test)
 
 ada_end_package()

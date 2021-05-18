@@ -139,11 +139,23 @@ Running this script will open a terminator terminal from within the docker, with
 
 ### Using RCLAda dynamic messages
 
+TODO: explanation (not actually an exercise)
+
 ### Using RCLAda static messages
+
+TODO: explanation (not actually an exercise)
 
 ### Writing a Publisher, dynamic version
 
+publisher_dynamic.adb
+
+Verify with `ros2 topic echo <topic>`
+
+Also `ros2 topic {info|type}`
+
 ### Writing a Publisher, static version
+
+publisher_static.adb
 
 ### Writing a Subscriber, dynamic version
 
@@ -179,3 +191,5 @@ Running this script will open a terminator terminal from within the docker, with
 
 ###  Navigate to a world goal (transform + VFH)
 
+
+## 6. Defining your own messages

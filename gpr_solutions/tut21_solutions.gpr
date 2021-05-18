@@ -1,7 +1,8 @@
 with "rcl";
+with "ros2_interfaces_rclada";
 with "ros2_interfaces_tutorial_aeic21";
 
-project Tut21_Exercises is
+project Tut21_Solutions is
 
    for Source_Dirs use ("src");
 
@@ -12,6 +13,9 @@ project Tut21_Exercises is
    for Library_Dir use "lib";
 
    for Main use (
+                 "epuck_test.adb",
+                 "publisher_dynamic",
+                 "publisher_static"
                 );
 
    package Builder is
@@ -38,4 +42,4 @@ project Tut21_Exercises is
       for Switches ("ada") use ("-g"); -- -rdynamic?
    end Linker;
 
-end Tut21_Exercises;
+end Tut21_Solutions;
