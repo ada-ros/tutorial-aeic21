@@ -167,6 +167,8 @@ See that autocompletion works for ros2 topic etc.
 
 ### Writing a Subscriber, static version
 
+subscriber_static.adb
+
 ### TurtleSim: first steps
 
 ### ePuck: first steps

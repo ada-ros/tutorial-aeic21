@@ -16,7 +16,8 @@ project Tut21_Solutions is
                  "epuck_test.adb",
                  "publisher_dynamic",
                  "publisher_static",
-                 "subscriber_dynamic"
+                 "subscriber_dynamic",
+                 "subscriber_static"
                 );
 
    package Builder is
