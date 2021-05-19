@@ -159,6 +159,12 @@ publisher_static.adb
 
 ### Writing a Subscriber, dynamic version
 
+subscriber_dynamic.adb
+
+$ ros2 topic pub /chatter std_msgs/msg/String 'data: "hello"'
+
+See that autocompletion works for ros2 topic etc.
+
 ### Writing a Subscriber, static version
 
 ### TurtleSim: first steps
