@@ -8,8 +8,11 @@ find_package(geometry_msgs REQUIRED)
 find_package(rosidl_generator_ada REQUIRED)
 find_package(rclada REQUIRED)
 find_package(rclada_tf2 REQUIRED)
+find_package(turtlesim REQUIRED)
 
-ada_import_interfaces(geometry_msgs)
+ada_import_interfaces(
+        geometry_msgs
+        turtlesim)
 
 ada_add_executables(
         tut21_exercises # CMake target

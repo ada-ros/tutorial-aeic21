@@ -41,7 +41,7 @@ also include demos and tutorials. We are going to use some of these, but
 otherwise a more limited set of packages could be installed with
 `ros-foxy-ros-base`.
 
-ROS/ROS2 distributions use packages with the prefix `ros-<version>-*`. You may see other ROS2 versions with their base Ubuntu system and support life at https://docs.ros.org/en/rolling/Releases.html. 
+ROS/ROS2 distributions use packages with the prefix `ros-<version>-*`. You may see other ROS2 versions with their base Ubuntu system and support life at https://docs.ros.org/en/rolling/Releases.html.
 
 ROS Foxy, which is used in this tutorial, is the current Long Term Service (LTS) ROS2 distribution. Very recently the next non-LTS version was released. Also, since June 2020, a rolling distribution exists on which development is carried out. RCLAda is developed on the latest LTS release.
 
@@ -65,14 +65,14 @@ With the previous steps, and after sourcing the `setup.bash` script, we are read
 
 1. Install the native Ada build tools:
     1. `apt install gnat gnat-gps gprbuild`
-    - GNAT CE 2020 will not work as it will complain about a few points in the Ada codebase. 
-    - Even after fixing those, you may experience linking problems when mixing code built with the native `g++` and the one packaged with GNAT CE 2020. 
+    - GNAT CE 2020 will not work as it will complain about a few points in the Ada codebase.
+    - Even after fixing those, you may experience linking problems when mixing code built with the native `g++` and the one packaged with GNAT CE 2020.
     - You **may** use the GNATstudio editor from CE 2020, if so you prefer, over the older GPS packaged in ubuntu as `gnat-gps`.
 1. Clone the RCLAda sources, including submodules, and using the aeic21 branch:
     1. `git clone --recurse-submodules -b aeic21 https://github.com/ada-ros/ada4ros2`
-    - The `ada4ros2` is a mostly empty repository, that is used to bring in several ROS2 packages as submodules. It also contains a few convenience scripts, but nothing necessary *per se* to use RCLAda. 
+    - The `ada4ros2` is a mostly empty repository, that is used to bring in several ROS2 packages as submodules. It also contains a few convenience scripts, but nothing necessary *per se* to use RCLAda.
     - The Ada ROS2 packages are detailed in the first part of the tutorial presentation. You can find them under the `src` folder of the repository.
-1. Enter the cloned repository: 
+1. Enter the cloned repository:
     1. `cd ada4ros2`
 1. Ensure the ROS2 environment is loaded: `source /opt/ros/foxy/setup.bash`
     - There is no ill effect by sourcing the script several times.
@@ -170,6 +170,27 @@ See that autocompletion works for ros2 topic etc.
 subscriber_static.adb
 
 ### TurtleSim: first steps
+
+(TODO: slide with turtle + axes)
+
+`ros2 run turtlesim turtlesim_node`
+
+`ros2 topic list`
+
+Identify `/turtle1/cmd_vel`, `/turtle1/pose`
+
+Identify type of these topics with `ros2 topic type`
+
+`geometry_msgs/msg/Twist`
+`turtlesim/msg/Pose`
+
+Do a fixed sequence (parameterized?)
+
+Create a remote controller
+
+Improve the remote controller by showing the current pose (with colors!)
+
+- Draw some figure
 
 ### ePuck: first steps
 
