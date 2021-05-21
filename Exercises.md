@@ -194,31 +194,32 @@ Improve the remote controller by showing the current pose (with colors!)
 
 ### ePuck: first steps
 
-### Pioneer 3AT: first steps
+`ros2 launch webots_ros2_epuck robot_launch.py`
 
+Identify name and type of command type. Conclusion?
 
+Update the remote controller of turtlesim to control the epuck
 
 ## 3. PRC communication (services/servers/clients)
 
 ### Servers
 
+Server_Example (WIP)
+
 ### Asynchronous clients
 
 ### Synchronous clients
-
-
 
 ## 4. Realistic exercises in the local frame
 
 ### Wandering robot with obstacle avoidance (Roomba-like)
 
+With the Turtlebot
+
 ### Navigate to a local goal (VFH local planner)
-
-
 
 ## 5. Realistic exercises in the global frame
 
 ###  Navigate to a world goal (transform + VFH)
-
 
 ## 6. Defining your own messages

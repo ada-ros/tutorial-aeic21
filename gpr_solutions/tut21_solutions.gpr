@@ -22,7 +22,9 @@ project Tut21_Solutions is
                  "subscriber_static",
                  "turtlesim_mosaic",
                  "turtlesim_commander",
-                 "turtlesim_hello"
+                 "turtlesim_hello",
+                 "epuck_commander",
+                 "server_example"
                 );
 
    package Builder is
