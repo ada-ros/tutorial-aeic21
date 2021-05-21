@@ -1,7 +1,11 @@
-with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Numerics;
+with Ada.Text_IO; use Ada.Text_IO;
 
-with RCL.Logging;
+with ANSI;
+
+with Common;
+
+--  with RCL.Logging;
 with RCL.Nodes;
 
 with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
@@ -15,6 +19,10 @@ procedure Turtlesim_Commander is
 
    use type ROSIDL.Types.Float64;
 
+   subtype Real is ROSIDL.Types.Float64;
+
+   type Fixed is delta 0.01 digits 10;
+
    Node : Nodes.Node'Class := Nodes.Init;
 
    package Pub is new Nodes.Typed_Publish
@@ -22,32 +30,59 @@ procedure Turtlesim_Commander is
        Node     => Node,
        Topic    => "/turtle1/cmd_vel");
 
-   Msg_Move, Msg_Turn : Geometry_Msgs.Messages.Twist.Handling.Message;
+   Msg_Move : Geometry_Msgs.Messages.Twist.Handling.Message;
+
+   Speed_Delta : constant Real := 0.1;
+   Turn_Delta  : constant Real := Ada.Numerics.Pi / 4.0;
+
+   --------------
+   -- Keypress --
+   --------------
+
+   procedure Keypress (Char : Character) is
+   begin
+      case Char is
+         when 'a' | 'A' =>
+            Msg_Move.Data.Angular.Z := Msg_Move.Data.Angular.Z + Turn_Delta;
+         when 'd' | 'D' =>
+            Msg_Move.Data.Angular.Z := Msg_Move.Data.Angular.Z - Turn_Delta;
+         when 'w' | 'W' =>
+            Msg_Move.Data.Linear.X := Msg_Move.Data.Linear.X + Speed_Delta;
+         when 's' | 'S' =>
+            Msg_Move.Data.Linear.X := Msg_Move.Data.Linear.X - Speed_Delta;
+         when ' ' =>
+            Msg_Move.Data.Linear.X := 0.0;
+            Msg_Move.Data.Angular.Z := 0.0;
+         when others =>
+            null;
+      end case;
+   end Keypress;
 
 begin
-   if Argument_Count /= 1 then
-      Logging.Warn ("Please give the angle in degrees to turn at each vertex");
-      return;
-   end if;
-
-   --  Msgs are 0-filled by ROS2
-
-   Msg_Move.Data.Linear.X := 1.0;
-
-   Msg_Turn.Data.Angular.Z :=
-     ROSIDL.Types.Float64'Value (Argument (1)) / 180.0 * Ada.Numerics.Pi;
-
    loop
-      --  Let's alternate 2" of drawing and 1" of turning counterclockwise
-
       Pub.Publish (Msg_Move);
-      Logging.Info ("Commanding movement...");
-      delay 2.0;
 
-      Pub.Publish (Msg_Move);
-      Logging.Info ("Commanding rotation in rad/s ="
-                    & Duration (Msg_Turn.Data.Angular.Z)'Image);
-      --  Convert to Duration just to get fixed point display
-      delay 1.0;
+      declare
+         Char      : Character;
+         Available : Boolean := False;
+      begin
+         Ada.Text_IO.Get_Immediate (Char, Available);
+
+         if Available then
+            Keypress (Char);
+         else
+            delay 0.1;
+         end if;
+
+         Put_Line (ANSI.Clear_Line
+                   & ANSI.Horizontal
+                   & ANSI.Up
+                   & ANSI.Clear_Line
+                   & "vx:"
+                   & Common.Emph (Fixed (Msg_Move.Data.Linear.X)'Image)
+                   & " "
+                   & "vz:"
+                   & Common.Emph (Fixed (Msg_Move.Data.Angular.Z)'Image));
+      end;
    end loop;
 end Turtlesim_Commander;
