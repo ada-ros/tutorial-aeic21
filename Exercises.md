@@ -4,6 +4,8 @@ The tutorial is structured in exercises of increasing involvement. The initial
 tasks, that deal with the setting up of the working environment, should
 preferably be carried out before the start of the tutorial.
 
+TODO: Webots install, and WARN about large downloads
+
 ## 0. Setup of the working environment
 
 Firstly, we will set up a plain ROS2 environment. With this, we would be ready
@@ -97,6 +99,10 @@ High Water Mark:  425
 ```
 
 If you experience difficulties setting up the environment, or do not have an Ubuntu base system, there are a couple of alternatives you may try. These alternatives are described next.
+
+### Extra tools
+    
+TODO: sudo apt install ros-foxy-rqt*
 
 ### Alternatives: gitpod
 
@@ -222,11 +228,15 @@ No timeouts may result in call lost because topic discovery take a few seconds. 
 
 ### Synchronous clients
 
+Client_Sync
+
 ## 4. Realistic exercises in the local frame
 
 ### Wandering robot with obstacle avoidance (Roomba-like)
 
 With the Turtlebot
+
+Turtlebot_Wander
 
 ### Navigate to a local goal (VFH local planner)
 

@@ -26,7 +26,8 @@ project Tut21_Solutions is
                  "epuck_commander",
                  "server_example",
                  "client_async",
-                 "client_sync"
+                 "client_sync",
+                 "turtlebot_wander"
                 );
 
    package Builder is
