@@ -204,9 +204,21 @@ Update the remote controller of turtlesim to control the epuck
 
 ### Servers
 
-Server_Example (WIP)
+Server_Example
+
+Test with `$ ros2 service call /ada_service std_srvs/srv/Trigger {}`
+
+The last `{}` can be omitted: empty message.
 
 ### Asynchronous clients
+
+Client_Async
+
+Play with the different timeouts to see what happens. Play with launching the server before/after the client.
+
+Warning after response is due to listener destruction
+
+No timeouts may result in call lost because topic discovery take a few seconds. Wait with the node up for a while.
 
 ### Synchronous clients
 

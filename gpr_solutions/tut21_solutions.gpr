@@ -24,7 +24,9 @@ project Tut21_Solutions is
                  "turtlesim_commander",
                  "turtlesim_hello",
                  "epuck_commander",
-                 "server_example"
+                 "server_example",
+                 "client_async",
+                 "client_sync"
                 );
 
    package Builder is
