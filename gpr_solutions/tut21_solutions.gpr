@@ -27,6 +27,7 @@ project Tut21_Solutions is
                  "server_example",
                  "client_async",
                  "client_sync",
+                 "epuck_wander",
                  "turtlebot_wander"
                 );
 

@@ -8,6 +8,8 @@
 
 with RCL.Logging;
 with RCL.Nodes;
+with RCL.QoS;
+with RCL.Subscriptions;
 
 --  with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
 with ROSIDL.Static.Tutorial_Aeic21.Sensor_Msgs.Messages.Laserscan;
@@ -48,7 +50,8 @@ procedure Turtlebot_Wander is
    --  Msg_Move : Geometry_Msgs.Messages.Twist.Handling.Message;
 
 begin
-   Subscribe_To_Laser (Node, "/scan");
+   Subscribe_To_Laser (Node, "/scan",
+                       Subscriptions.Defaults.Using (QoS.Profiles.Sensor_Data));
    Logging.Info ("Ready to see the world.");
 
    loop

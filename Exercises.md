@@ -234,7 +234,9 @@ Client_Sync
 
 ### Wandering robot with obstacle avoidance (Roomba-like)
 
-With the Turtlebot
+With EPuck/Turtlebot
+
+Epuck_Wander
 
 Turtlebot_Wander
 
