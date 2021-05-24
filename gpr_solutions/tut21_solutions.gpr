@@ -39,7 +39,8 @@ project Tut21_Solutions is
       For_Autogen := ("-gnatwU");
 
       for Switches ("ada") use ("-gnatVa", "-gnatwa", "-g", "-O2", "-gnato",
-                                "-fstack-check", "-gnata", "-gnat12");
+                                "-fstack-check", "-gnata", "-gnat12",
+                                "-gnatX");
 
       for Switches ("C") use ("-Wall", "-Wextra", "-pedantic");
 
