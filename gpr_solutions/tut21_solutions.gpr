@@ -28,7 +28,8 @@ project Tut21_Solutions is
                  "client_async",
                  "client_sync",
                  "epuck_wander",
-                 "turtlebot_wander"
+                 "turtlebot_wander",
+                 "turtlebot_vfh"
                 );
 
    package Builder is

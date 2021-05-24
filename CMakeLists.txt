@@ -13,6 +13,7 @@ find_package(turtlesim REQUIRED)
 
 ada_import_interfaces(
         geometry_msgs
+        nav_msgs
         sensor_msgs
         turtlesim)
 
