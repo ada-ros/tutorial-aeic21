@@ -242,8 +242,13 @@ Turtlebot_Wander
 
 ### Navigate to a local goal (VFH local planner)
 
-## 5. Realistic exercises in the global frame
+Turtlebot_VFH
 
-###  Navigate to a world goal (transform + VFH)
+### Transformations
+
+https://blog.hadabot.com/ros2-navigation-tf2-tutorial-using-turtlesim.html
+
+ros2 run tf2_ros tf2_echo
+ros2 run tf2_ros tf2_monitor
 
 ## 6. Defining your own messages
