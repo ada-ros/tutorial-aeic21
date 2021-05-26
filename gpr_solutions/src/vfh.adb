@@ -137,44 +137,35 @@ package body VFH is
       Scan_Angle : Real := Real (Scan.Angle_Min);
       Scan_I     : Types.Size_T := (if Params.Flip then Scan.Ranges.Size else 1);
       Scan_Delta : constant Types.Size_T := (if Params.Flip then -1 else 1);
-      Bucket_I   : Positive := 1;
+
+      Cloud      : RCL.TF2.Point_Array (1 .. Natural (Scan.Ranges.Size));
+      Cloud_Last : Natural := Cloud'First - 1;
    begin
 
-      --  Drop too early scans
+      --  Convert the scan into a cloud to reuse the code
 
-      while Scan_Angle < Buckets (Buckets'First).Ang_Ini loop
-         Scan_I     := @ + Scan_Delta;
-         Scan_Angle := @ + Real (Scan.Angle_Increment);
-      end loop;
-
-      --  Valid readings
-
-      while Scan_Angle < Buckets (Buckets'Last).Ang_End and then
-        Scan_I <= Types.Size_T (Scan.Ranges.Size)
-      loop
-         if Scan_Angle >= Buckets (Bucket_I).Ang_End then
-            Bucket_I := @ + 1;
-            exit when Bucket_I > Buckets'Last; -- Can't happen, but JIC
-         end if;
-
+      while Scan_I in 1 .. Scan.Ranges.Size loop
          declare
             use type Types.Float32;
             Reading : Types.Float32 renames Scan.Ranges.Data (Scan_I);
          begin
-            if Reading'Valid and then
+            if Reading'Valid and Then
               Reading > Scan.Range_Min and then Reading < Scan.Range_Max
-              and then Real (Reading) < Params.Far_Dist
-            then
-               Buckets (Bucket_I).Weight := @ +
-                 (Params.Far_Dist - Real (Reading)) / Params.Far_Dist * 3.0;
+            Then
+               Cloud_Last := @ + 1;
+               Cloud (Cloud_Last) :=
+                 (X => TF2.To_Point ((Bearing => TF2.Radians (Scan_Angle),
+                                      Distance => TF2.Real (Reading))).X,
+                  Y => TF2.To_Point ((Bearing => TF2.Radians (Scan_Angle),
+                                      Distance => TF2.Real (Reading))).Y,
+                  Z => 0.0);
             end if;
          end;
-
-         Scan_I := @ + Scan_Delta;
          Scan_Angle := @ + Real (Scan.Angle_Increment);
+         Scan_I := @ + Scan_Delta;
       end loop;
 
-      --  Rest of scans is not useful either
+      Fill_Buckets (Params, Buckets, Cloud (Cloud'First .. Cloud_Last));
 
    end Fill_Buckets;
 

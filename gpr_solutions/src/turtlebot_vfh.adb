@@ -68,7 +68,6 @@ procedure Turtlebot_VFH is
       pragma Unreferenced (Node, Info);
       use Common;
    begin
-      Logging.Warn ("Frame is " & Types.Get_String (Msg.Header.Frame_Id));
       if Have_Goal and then Have_Pose then
          declare
             Cmd_Vel : constant VFH.Velocity2D := VFH.Steer
