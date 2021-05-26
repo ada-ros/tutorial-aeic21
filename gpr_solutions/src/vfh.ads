@@ -1,5 +1,7 @@
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics;
 
+with RCL.TF2;
+
 with ROSIDL.Static.Tutorial_Aeic21.Sensor_Msgs.Messages.Laserscan;
 with ROSIDL.Types;
 
@@ -57,6 +59,12 @@ package VFH is
                    Scan   : Sensor_Msgs.Messages.Laserscan.Message;
                    Params : Parameters := (others => <>))
                    return Velocity2D;
+
+   function Steer (Odom,
+                   Goal   : Pose2D;
+                   Cloud  : RCL.TF2.Point_Array;
+                   Params : Parameters := (others => <>))
+                      return Velocity2D;
 
 private
 
