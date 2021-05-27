@@ -1,10 +1,10 @@
 # Exercises
 
-The tutorial is structured in exercises of increasing involvement. The initial
-tasks, that deal with the setting up of the working environment, should
-preferably be carried out before the start of the tutorial.
+The tutorial is structured in exercises of increasing involvement. The initial tasks (`0.x`), that deal with the setting up of the working environment, is **strongly recommended** to be carried out before the start of the tutorial.
 
-TODO: Webots install, and WARN about large downloads
+In particular, setting up the *Webots* simulator requires a very large download (see task `0.3`).
+
+If you find any issues with preparations for the tutorial, please contact me at `amosteo@unizar.es`or open an issue at https://github.com/ada-ros/tutorial-aeic21/issues
 
 ## 0. Setup of the working environment
 
@@ -12,14 +12,14 @@ Firstly, we will set up a plain ROS2 environment. With this, we would be ready
 to develop ROS2 packages in C, C++ or Python. Subsequently, we will set up the
 Ada-specific environment.
 
-Remember that this tutorial has been designed to be carried out on Ubuntu 20.04 LTS.
+This tutorial has been designed to be carried out on Ubuntu 20.04 LTS.
 
-### ROS2 setup
+### 0.1 ROS2 setup
 
 The simplest way of setting up ROS2 in Ubuntu is from binary packages. Follow
 the instructions at
 https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html, which are
-summarized below:
+summarized here:
 
 1. Ensure your system locale supports UTF-8 (`locale` command).
 1. Install pre-requisite packages:
@@ -36,7 +36,7 @@ done by sourcing the `/opt/ros/<version>/setup.bash` file (a `zsh` alternative e
 
 > `source /opt/ros/foxy/setup.bash`
 
-Afterwards, we can verify our system is ready running, for example, `ros2`.
+Afterwards, we can verify our system is ready by running, for example, the command `ros2` which should now be in our `PATH`.
 
 The `ros-foxy-desktop` package will install a complete suite of packages that
 also include demos and tutorials. We are going to use some of these, but
@@ -47,7 +47,7 @@ ROS/ROS2 distributions use packages with the prefix `ros-<version>-*`. You may s
 
 ROS Foxy, which is used in this tutorial, is the current Long Term Service (LTS) ROS2 distribution. Very recently the next non-LTS version was released. Also, since June 2020, a rolling distribution exists on which development is carried out. RCLAda is developed on the latest LTS release.
 
-### A note on terminals
+#### A note on terminals
 
 Development for ROS/ROS2 tends to require multiple commands run from several
 terminals. For this reason, it is advisable to use a terminal that allows
@@ -61,16 +61,16 @@ Likewise, a terminal that can be called/dismissed quickly may result convenient
 to some people. A personal favorite (which also supports splitting) is `guake`,
 bound to some unused function key (e.g. `F12`).
 
-### RCLAda setup
+### 0.2 RCLAda setup
 
-With the previous steps, and after sourcing the `setup.bash` script, we are ready to set up the Ada environment. Full instructions can be found at https://github.com/ada-ros/ada4ros2 and are summarized next:
+With the previous steps, and after sourcing the `/opt/ros/foxy/setup.bash` script, we are ready to set up the Ada environment. Full instructions can be found at https://github.com/ada-ros/ada4ros2 and are summarized next:
 
 1. Install the native Ada build tools:
     1. `apt install gnat gnat-gps gprbuild`
-    - GNAT CE 2020 will not work as it will complain about a few points in the Ada codebase.
+    - GNAT CE 2020/2021 will not work as it will complain about a few issues in the Ada codebase.
     - Even after fixing those, you may experience linking problems when mixing code built with the native `g++` and the one packaged with GNAT CE 2020.
-    - You **may** use the GNATstudio editor from CE 2020, if so you prefer, over the older GPS packaged in ubuntu as `gnat-gps`.
-1. Clone the RCLAda sources, including submodules, and using the aeic21 branch:
+    - You **may** use the GNATstudio editor from the Community Edition, if so you prefer, over the older GPS packaged in ubuntu as `gnat-gps`.
+1. Clone the RCLAda sources, including submodules, and using the `aeic21` branch:
     1. `git clone --recurse-submodules -b aeic21 https://github.com/ada-ros/ada4ros2`
     - The `ada4ros2` is a mostly empty repository, that is used to bring in several ROS2 packages as submodules. It also contains a few convenience scripts, but nothing necessary *per se* to use RCLAda.
     - The Ada ROS2 packages are detailed in the first part of the tutorial presentation. You can find them under the `src` folder of the repository.
@@ -82,6 +82,8 @@ With the previous steps, and after sourcing the `setup.bash` script, we are read
     1. `colcon build`
     - `colcon` is the build tool used by ROS2. It is an 'orchestrator' of the build, but it does not mandate a particular method for building a package. It determines dependencies and dispatches to the build method of each package.
     - The build should finish without errors; otherwise we cannot continue.
+      - To retry a build from scratch, delete the `build` and `install` folders at the repository root.
+    - As part of the build process, `colcon` will create a new `install/setup.bash` script under the current folder.
 1. Load the new environment that includes the just-compiled Ada packages:
     1. `source install/setup.bash`
     - ROS2 environments are properly layered, so when the `install/setup.bash` script is generated by the build process, it also will load the pre-existing environment; in this case, the base ROS2 environment. This means that, in a new terminal, it is enough to source the `ada4ros2/install/setup.bash` script to be ready to go.
@@ -98,15 +100,23 @@ Current Water Mark:  0
 High Water Mark:  425
 ```
 
-If you experience difficulties setting up the environment, or do not have an Ubuntu base system, there are a couple of alternatives you may try. These alternatives are described next.
+If you experience difficulties setting up the environment, or do not have an Ubuntu base system, there are a couple of alternatives you may try. These alternatives are described in the "Alternatives" section.
 
 ### Extra tools
-    
-TODO: sudo apt install ros-foxy-rqt*
+
+A few useful packages are left out by the ros2 install desktop installation.
+
+1. Install extra packages by running:
+   1. `sudo apt install ros-foxy-rqt* ros-foxy-webots-ros2
+2. Source the `setup.bash` script again to include these packages:
+   1. `source /opt/ros/foxy/setup.bash`
+3. Install the *Webots* simulator by running (ensure you have a few GBs of free space beforehand):
+   1. ros2 launch webots_ros2_epuck robot_launch.py
+      * You'll receive a prompt asking to install the simulator at a default location. After accepting, a large download will occur. After the installation, a simulator window should open if everything was installed correctly. You can close this window before continuing.
 
 ### Alternatives: gitpod
 
-GitPod is a remote development environment that allows to run VSCode in a browser, with a particular environment generated with Docker underneath. This approach serves for the first exercises, that do not require visualization. For this reason, it is recommended as a last resort for this tutorial, or as a temporary measure while the previous instructions are completed.
+GitPod is a remote development environment that allows to run VSCode in a browser, with a particular environment generated with Docker underneath. This approach serves for the first exercises, that do not require graphical windows. For this reason, it is recommended as a last resort for this tutorial, or as a temporary measure while the previous instructions are completed.
 
 The gitpod service is free for open source projects, but it requires an account on Github/Gitlab/Bitbucket.
 
@@ -122,24 +132,40 @@ ls: cannot access '/home/gitpod/.bashrc.d/*': No such file or directory
 
 comes from the own Gitpod service and is inoffensive.
 
-The Gitpod session already has ROS2 preinstalled, and the underlying Docker is an Ubuntu 20.04. Thus, it is enough to do the following in the VSCode terminal to catch up to the end of the previous section:
+The Gitpod session already has ROS2 preinstalled, and the underlying Docker is an Ubuntu 20.04. Thus, it is enough to do the following in the VSCode terminal to catch up to the end of the RCLAda setup section:
 
 1. `source /opt/ros/foxy/setup.bash`
 2. `colcon build`
 
 ### Alternatives: docker
 
-A more powerful alternative is to use a Docker image that already contains the ROS2 environment. This may allow to successfully follow the tutorial in another Linux other than Ubuntu 20.04. The image is: <TODO: NAME OF IMAGE>
+NOTE: this approach is only recommended for users already familiar with docker, and that already have docker installed.
 
-This image is configured to connect to the X server of the host machine (so it working with Wayland is unclear). You need to additionally connect your source directory so it is accessible within the Docker. A script is provided for your convenience that you can inspect for details:
+A slightly more powerful alternative is to use a Docker image that already contains the ROS2 environment. This may allow to successfully follow the tutorial in another Linux other than Ubuntu 20.04. The image tag is `mosteo/ada4ros2:foxy`
 
-`dev/docker.sh`
+This image contains some graphical packages (like `turtlesim`) which enable the realization of a few more exercises. Still, the exercises involving the full blown simulator cannot be carried out this way.
 
-Running this script will open a terminator terminal from within the docker, with the ROS2 environment already loaded. (No need to source the `/opt/ros/foxy/setup.bash` script.)
+To simplify the task of running graphical applications inside a docker, the recommended approach is to use the `rocker` tool. This tool is distributed via the same repositories as ROS2. Hence, after setting up the ROS2 sources (task `0.1`, step 3), it can be installed by running:
 
-## 1. Creating a new ROS2 package for Ada development
+1. `sudo apt install python3-rocker`
 
+Afterwards, the recommendation is to launch a terminator window from the docker, and keep this terminal always open:
 
+1. `rocker --x11 --user --home mosteo/ada4ros2:foxy terminator`
+   * The `--user` option may not work and can be left out if you get an error. In that case, the terminal will be open with root as the user, and the first step should be to create a regular user with `adduser <username>`, and then change to it with `su <username>`.
+   * Note that the above command will mount your home directory inside the docker, at `/home/<your user>`. Thus, it is dangerous to run commands as root in that environment.
+
+This solution already has the ROS2 environment loaded. (No need to source the `/opt/ros/foxy/setup.bash` script.)
+
+## 1. Ada development environments for ROS2
+
+### Creating a new ROS2 package
+
+### Plain build & edit with colcon
+
+### Edit with VSCode
+
+### Edit and compile with GNATstudio (formerly known as GPS)
 
 ## 2. Blackboard communication (topics/publishers/subscriptions)
 
@@ -202,11 +228,11 @@ Improve the remote controller by showing the current pose (with colors!)
 
 `ros2 launch webots_ros2_epuck robot_launch.py`
 
-Identify name and type of command type. Conclusion?
+Identify name and type of command topic. Conclusion?
 
 Update the remote controller of turtlesim to control the epuck
 
-## 3. PRC communication (services/servers/clients)
+## 3. RPC communication (services/servers/clients)
 
 ### Servers
 

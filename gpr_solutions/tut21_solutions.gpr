@@ -16,22 +16,21 @@ project Tut21_Solutions is
    for Library_Dir use "lib";
 
    for Main use (
-                 "epuck_test.adb",
-                 "publisher_dynamic",
-                 "publisher_static",
-                 "subscriber_dynamic",
-                 "subscriber_static",
-                 "turtlesim_mosaic",
-                 "turtlesim_commander",
-                 "turtlesim_hello",
-                 "epuck_commander",
-                 "server_example",
-                 "client_async",
-                 "client_sync",
-                 "epuck_wander",
-                 "turtlebot_wander",
-                 "turtlebot_vfh",
-                 "turtlebot_vfh_tf2"
+                 "sol_publisher_dynamic",
+                 "sol_publisher_static",
+                 "sol_subscriber_dynamic",
+                 "sol_subscriber_static",
+                 "sol_turtlesim_mosaic",
+                 "sol_turtlesim_commander",
+                 "sol_turtlesim_hello",
+                 "sol_epuck_commander",
+                 "sol_server_example",
+                 "sol_client_async",
+                 "sol_client_sync",
+                 "sol_epuck_wander",
+                 "sol_turtlebot_wander",
+                 "sol_turtlebot_vfh",
+                 "sol_turtlebot_vfh_tf2"
                 );
 
    package Builder is

@@ -21,12 +21,41 @@ ada_add_executables(
         tut21_exercises # CMake target
         ${PROJECT_SOURCE_DIR}/gpr_exercises
         bin
-        )
+        client_async 
+        client_sync
+        epuck_commander
+        epuck_wander
+        publisher_dynamic
+        publisher_static
+        server_example
+        subscriber_dynamic
+        subscriber_static
+        turtlebot_vfh
+        turtlebot_vfh_tf2
+        turtlebot_wander
+        turtlesim_commander
+        turtlesim_hello
+        turtlesim_mosaic)
 
 ada_add_executables(
         tut21_solutions # CMake target
         ${PROJECT_SOURCE_DIR}/gpr_solutions
         bin
-        epuck_test)
+
+        sol_client_async 
+        sol_client_sync
+        sol_epuck_commander
+        sol_epuck_wander
+        sol_publisher_dynamic
+        sol_publisher_static
+        sol_server_example
+        sol_subscriber_dynamic
+        sol_subscriber_static
+        sol_turtlebot_vfh
+        sol_turtlebot_vfh_tf2
+        sol_turtlebot_wander
+        sol_turtlesim_commander
+        sol_turtlesim_hello
+        sol_turtlesim_mosaic)
 
 ada_end_package()

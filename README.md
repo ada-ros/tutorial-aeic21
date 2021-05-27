@@ -16,6 +16,8 @@ The tutorial includes a number of practical exercises. They have been developed 
     - The package `gnat-gps` from Ubuntu might work too, but this is untested.
 - Webots simulator from the ROS2 Ubuntu packages.
     - Install package `ros-foxy-webots-ros2`
+    - Run once the command `ros2 launch webots_ros2_epuck robot_launch.py` to
+      trigger the actual installation of the simulator.
 
 To be able to carry out the exercises with minimal friction, it is recommended to have a computer with the given configuration. Other Linux distributions might work with unknown amounts of tinkering, by installing ROS2 from sources, but this might be troublesome and without guarantees of success. Windows will not work as RCLAda does not target it.
 

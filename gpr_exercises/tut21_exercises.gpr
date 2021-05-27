@@ -1,5 +1,6 @@
 with "rcl";
 with "ros2_interfaces_tutorial_aeic21";
+with "tf2_ros";
 
 project Tut21_Exercises is
 
@@ -12,7 +13,22 @@ project Tut21_Exercises is
    for Library_Dir use "lib";
 
    for Main use (
-                );
+        "client_async",
+        "client_sync",
+        "epuck_commander",
+        "epuck_wander",
+        "publisher_dynamic",
+        "publisher_static",
+        "server_example",
+        "subscriber_dynamic",
+        "subscriber_static",
+        "turtlebot_vfh",
+        "turtlebot_vfh_tf2",
+        "turtlebot_wander",
+        "turtlesim_commander",
+        "turtlesim_hello",
+        "turtlesim_mosaic"
+        );
 
    package Builder is
       for Switches ("ada") use ("-j0", "-g");
@@ -22,7 +38,8 @@ project Tut21_Exercises is
       For_Autogen := ("-gnatwU");
 
       for Switches ("ada") use ("-gnatVa", "-gnatwa", "-g", "-O2", "-gnato",
-                                "-fstack-check", "-gnata", "-gnat12");
+                                "-fstack-check", "-gnata", "-gnat12",
+                                "-gnatX");
 
       for Switches ("C") use ("-Wall", "-Wextra", "-pedantic");
 
