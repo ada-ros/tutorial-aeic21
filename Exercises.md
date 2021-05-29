@@ -1,10 +1,12 @@
 # Exercises
 
-The tutorial is structured in exercises of increasing involvement. The initial tasks (`0.x`), that deal with the setting up of the working environment, is **strongly recommended** to be carried out before the start of the tutorial.
+The tutorial is structured in exercises of increasing involvement. The initial tasks (`0.x`), that deal with the setting up of the working environment, are **strongly recommended** to be carried out before the day of the tutorial.
 
-In particular, setting up the *Webots* simulator requires a very large download (see task `0.3`).
+In particular, setting up the *Webots* simulator requires a large download of ~1.5GB (see task `0.3`).
 
-If you find any issues with preparations for the tutorial, please contact me at `amosteo@unizar.es`or open an issue at https://github.com/ada-ros/tutorial-aeic21/issues
+If you find any issues with preparations for the tutorial, please contact me at `amosteo@unizar.es`or open an issue at https://github.com/ada-ros/tutorial-aeic21/issues.
+
+[TOC]
 
 ## 0. Setup of the working environment
 
@@ -102,7 +104,7 @@ High Water Mark:  425
 
 If you experience difficulties setting up the environment, or do not have an Ubuntu base system, there are a couple of alternatives you may try. These alternatives are described in the "Alternatives" section.
 
-### Extra tools
+### 0.3 Extra tools
 
 A few useful packages are left out by the ros2 install desktop installation.
 
@@ -141,7 +143,7 @@ The Gitpod session already has ROS2 preinstalled, and the underlying Docker is a
 
 NOTE: this approach is only recommended for users already familiar with docker, and that already have docker installed.
 
-A slightly more powerful alternative is to use a Docker image that already contains the ROS2 environment. This may allow to successfully follow the tutorial in another Linux other than Ubuntu 20.04. The image tag is `mosteo/ada4ros2:foxy`
+A slightly more powerful alternative to Gi is to use a Docker image that already contains the ROS2 environment. This may allow to successfully follow the tutorial in another Linux other than Ubuntu 20.04. The image tag is `mosteo/ada4ros2:foxy`
 
 This image contains some graphical packages (like `turtlesim`) which enable the realization of a few more exercises. Still, the exercises involving the full blown simulator cannot be carried out this way.
 
@@ -261,7 +263,7 @@ The RCLAda project defines CMake functions to simplify integration of GNAT proje
 
 * If you have `alr` installed, enter the `my_ada_package` folder and run `alr init --bin ada_code`. This will create an `ada_code` nested folder with a ready-to-use GNAT project.
 * If you do not have `alr`, you can run `gnat-gps` or `gnatstudio` and, in the welcome window, choose `"Create a new project..."`. Then, select the basic simple Ada project:
-  ![image-20210529211258051](/home/jano/prog/ada4ros2/src/tutorial_aeic21/resources/image-20210529211258051.png)
+  ![image-20210529211258051](Exercises.assets/image-20210529211258051.png)
   * It is recommended to place the new project in its own subfolder. This way, several projects can cohabit inside one ROS2 package.
 
 Verify that you can build the project, either using the GUI options or by running `gprbuild` inside the project folder.
@@ -302,7 +304,7 @@ We need now to include this project in the build process of ROS2. To do so,
 
 5. Edit your main file so it prints something, and verify the changes by rebuilding and running your very first ROS2 executable.
 
-**CONGRATULATIONS!** It may seem a trivial step, but having your Ada code built in the context of other ROS2 packages is no small feature, and the very first step needed to build actual robotics code.
+**CONGRATULATIONS!** It may seem a trivial step, but having your Ada code built in the context of other ROS2 packages is  the very first step needed to build actual robotics code.
 
 ### 1.4 Edit with VSCode
 
@@ -320,7 +322,56 @@ The recommended route is to use `File -> Open folder...` to open the `ada4ros2` 
 
 There are already some tasks defined in the `ada4ros2/.vscode` folder to build, clean & build, update the build and build only the current file by using `Terminal -> Run task...`
 
+Another straightforward possibility is to run `colcon` from the terminal embedded in VSCode.
+
 ### 1.5 Edit and compile with GNATstudio/GPS
+
+You may start to realize that running `colcon build` every time and then navigating to errors by hand is going to be a suboptimal experience. The optimal situation, if you are already an user of GNATstudio/GPS, would be to be able to use them as with regular Ada standalone projects.
+
+For an isolated project like the one we just created in the preceding exercises, there is indeed nothing preventing doing exactly that. The trouble starts when we are using Ada projects in other packages (as we will shortly doing to use the `RCLAda` binding, for example). `colcon build`, for starters, does an out-of-tree build in the `./build` folder; the final executables, libraries and generated GPR project files are furthermore located in the `./install` folder. This results in a fragile situation in which only after a complete successful build we can use GNATstudio/GPS (as they require a valid GPR project, with all the dependencies being available).
+
+Just as an example, we will open the project containing the solutions to the remaining exercises now, with `gnat-gps` (or `gnatstudio`).
+
+1. Build the complete workspace:
+   `colcon build`
+
+2. Run the `printenv_ada` script  to inspect the environment that is needed to build/load projects with gnatstudio/gprbuild:
+   `./printenv_ada`
+   The output should be something like:
+
+   > export GPR_PROJECT_PATH="/home/user/prog/ada4ros2/src/rclada_client_skeleton:/home/user/prog/ada4ros2/src/rclada_common/gpr_aaa:/home/user/prog/ada4ros2/src/rclada_common/gpr_ament:/home/user/prog/ada4ros2/src/rclada_common/gpr_c_builtins:/home/user/prog/ada4ros2/src/rclada_common/gpr_cstrings:/home/user/prog/ada4ros2/src/rclada_examples:/home/user/prog/ada4ros2/src/rclada_fosdem20:/home/user/prog/ada4ros2/src/rclada/gpr_rcl:/home/user/prog/ada4ros2/src/rclada/gpr_selftest:/home/user/prog/ada4ros2/src/rclada_tf2/gpr_examples:/home/user/prog/ada4ros2/src/rclada_tf2/gpr_tf2_ros:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_c_typesupport:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_generator:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl/dl-ada:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl/dl-ada/cstrings:/home/user/prog/ada4ros2/src/tutorial_aeic21/gpr_exercises:/home/user/prog/ada4ros2/src/tutorial_aeic21/gpr_solutions:/home/user/prog/ada4ros2/install/rclada_common/share/gpr:/home/user/prog/ada4ros2/install/rclada_examples/share/gpr:/home/user/prog/ada4ros2/install/rclada_fosdem20/share/gpr:/home/user/prog/ada4ros2/install/rclada/share/gpr:/home/user/prog/ada4ros2/install/rclada_tf2/share/gpr:/home/user/prog/ada4ros2/install/rosidl_generator_ada/share/gpr:/home/user/prog/ada4ros2/install/tutorial_aeic21/share/gpr"
+
+   **NOTE**: the `printenv_ada` assumes that all packages are under `./src`.
+
+3. Actually do load this Ada environment:
+   `source <(./printenv_ada)`
+
+4. Open the project with the solutions in GNATstudio/gnat-gps
+
+   * With gnat-gps: `gnat-gps -P src/tutorial_aeic21/gpr_solutions/tut21_solutions.gpr`
+
+   * With gnatstudio: `path/to/gnatstudio -P src/tutorial_aeic21/gpr_solutions/tut21_solutions.gpr`
+
+     * NOTE: the gnat compiler in the path should be the one in `/usr/bin` and not the one in the Community Edition; otherwise compilation will fail. You can verify the version in use from within gnatstudio by going to `Help -> About...`:
+       ![image-20210530004922707](Exercises.assets/image-20210530004922707.png) 
+
+       and the version should be, as shown, GNAT 9.3.0 from Ubuntu's `gnat` package.
+
+   * After successfully opening the root project, all *withed* projects and sources are accessible through the Project view:
+     ![image-20210530003718945](Exercises.assets/image-20210530003718945.png)
+
+5. Build everything with `Build -> Project -> Build all`
+
+   * **Note**: since the compilation is now happening *in-tree*, everything will be recompiled and the final executables will be in the source tree, and not in the `build` or `install ` folders. Keep this in mind to run the appropriate final binaries in case of changes.
+   * The advantage of editing this way is that now `colcon` is not needed to make changes and rebuild, and `gprbuild` will indeed recompile only the required sources for any changes. This is in general much faster. Also, navigation through Ada sources with Ctrl+Click is much more robust in GNATstudio vs VSCode.
+
+6. Verify that only minimal recompilation is happening by opening, for example, `sol_publisher_static.adb` in the root project (`Tut21_Solutions`) and modifying some of the strings in there, and rebuilding like in the previous step.
+
+   * Undo the changes after the test.
+
+### Conclusion
+
+In this block we have seen, firstly, how to create a new ROS2 package and how to integrate in it a GNAT project; and finally, how edition and compilation of Ada sources in the context of ROS2 packages can be achieved, from raw `colcon` in the terminal to the practicality of a full-fledged Ada GUI such as GNATstudio. 
 
 ## 2. Blackboard communication (topics/publishers/subscriptions)
 
@@ -387,6 +438,8 @@ Identify name and type of command topic. Conclusion?
 
 Update the remote controller of turtlesim to control the epuck
 
+### Conclusion
+
 ## 3. RPC communication (services/servers/clients)
 
 ### Servers
@@ -411,11 +464,11 @@ No timeouts may result in call lost because topic discovery take a few seconds. 
 
 Client_Sync
 
-## 4. Realistic exercises in the local frame
+### Conclusion
+
+## 4. Realistic exercises
 
 ### Wandering robot with obstacle avoidance (Roomba-like)
-
-With EPuck/Turtlebot
 
 Epuck_Wander
 
@@ -432,4 +485,8 @@ https://blog.hadabot.com/ros2-navigation-tf2-tutorial-using-turtlesim.html
 ros2 run tf2_ros tf2_echo
 ros2 run tf2_ros tf2_monitor
 
-## 6. Defining your own messages
+### Conclusion
+
+## 5. Defining your own messages
+
+### Conclusion
