@@ -159,13 +159,168 @@ This solution already has the ROS2 environment loaded. (No need to source the `/
 
 ## 1. Ada development environments for ROS2
 
-### Creating a new ROS2 package
+In this section you will create your first ROS2 package containing a GNAT project. Afterwards, a couple of options for the edition/compiling/running cycle will be examined.
 
-### Plain build & edit with colcon
+In the following, it is assumed that you are working inside a clone of the `ada4ros2` repository, as described in task 0.2. This may be located anywhere, but for the rest of the exercises the documentation will assume this repository is checked out at `$HOME/ada4ros2`, or `~/ada4ros2` for short.
 
-### Edit with VSCode
+### 1.1 Creating a new ROS2 package
 
-### Edit and compile with GNATstudio (formerly known as GPS)
+ROS2 packages require the following elements to be ready to work:
+
+1. A `package.xml` file that describes the package and allows `colcon` to invoke the proper build method on it, after all its dependencies have been built.
+2. Build-method-specific files that carry out the actual compilation. In the case of C++/Ada packages, this is achieved by a CMake `CMakeLists.txt` file. 
+3. For Ada packages, in addition, a `gprbuild` project has to be provided.
+
+Steps 1 and 2 can be jump-started by using the `ros2 pkg` subcommands. Follow these steps to create your first Ada ROS2 package:
+
+1. Run `ros2 pkg create` without more arguments to get an idea of the parameters that can be used to create a package.
+
+2. Create a package by running
+
+   1. `ros2 pkg create my_ada_package --dependencies rclada_common --description "My first Ada ROS2 package"`
+      * This command will create a `my_ada_package` folder under the folder where the command was run. By convention, packages are either at the root of the repository or under the `src` folder. You can leave the created `my_ada_package`folder at its current location or move it under `src`. This does not make a difference for `colcon`.
+      * By convention, all ROS2 package names have to be in lowercase.  If we were to use `my_Ada_package` we would get nagging warnings about it.
+
+3. Verify the package was correctly created and is detected by `colcon` by running
+
+   1. `colcon graph`
+
+      * The previous command should show the following output:
+
+        ```
+        rclada_common           +***...**
+        my_ada_package           +       
+        rosidl_generator_ada      +*....*
+        rclada                     +*****
+        rclada_client_skeleton      +    
+        rclada_examples              +   
+        rclada_fosdem20               +  
+        rclada_tf2                     +*
+        tutorial_aeic21                 +
+        ```
+
+      * Note how our package depends on `rclada_common`, as we requested during creation.
+
+   2. Examine the `my_ada_package/package.xml` file to see how the description and package version could be updated; and how more dependencies could be added.
+
+In the following exercises we will see a few alternatives for editing our package. For now, we have a plain C++ package; soon we will turn it into an Ada package in task 1.3.
+
+### 1.2 Plain build & edit with colcon
+
+The simplest way of working is by using any editor and compiling/running from the command line. Try the following alternatives:
+
+1. Simply rebuild all packages in the workspace:
+   1. `colcon build`
+      This is an expensive option because it will rebuild all packages in the workspace. Although some recompilations are avoided by CMake and `gprbuild`, the process still can be time consuming. Also, some files are regenerated and are compiled every time.
+2. Build our package and all its transitive dependencies:
+   1. `colcon build --packages-up-to my_ada_package`
+      This is a slightly better choice since any packages not needed by our target package are not recompiled.
+3. Build just our package:
+   1. `colcon build --packages-select my_ada_package`
+      This option is the fastest one, but can only be used once all dependencies have been previously compiled and sourced with `source install/setup.bash`.
+
+After a successful build, the environment must be updated so executables and libraries are properly located:
+
+1. `source install/setup.bash`
+   Test that ROS2 now detects our package, even if it does not yet build any executables or libraries. Try to autocomplete the package name by typing:
+2. `ros2 pkg prefix my[⇥TAB]`
+   And the response should be something similar to `/home/user/ada4ros2/install/my_ada_package`
+
+#### In desperate times
+
+At some point you may find yourself in a situation where compilation throws strange errors, the GNAT projects don't load, and the environment seems broken. At these times the safest fallback is to rebuild from scratch. To that end, you need to delete all build products and recompile with the initial ROS2 environment:
+
+1. `source /opt/ros/foxy/setup.bash`
+2. `rm -rf build install`
+   Beware that you do not delete anything unintended with the previous command! This is to be run from the repository root.
+3. `colcon build`
+4. `source install/setup.bash`
+
+### 1.3 Create a GNAT project for your package
+
+If you examine the `my_ada_package/CMakeLists.txt`, you will see that there are no useful things built. Indeed, this file can be stripped down to the bare minimum:
+
+```cmake
+# CMakeLists.txt
+
+cmake_minimum_required(VERSION 3.5)
+project(my_ada_package)
+
+find_package(ament_cmake REQUIRED)
+find_package(rclada_common REQUIRED)
+```
+
+1. Do so and remove all lines but the ones show above.
+   **NOTE**: in particular, the line `ament_package()` *must* be removed.
+
+The `package.xml` and `CMakeLists.txt` are independent; the former express dependencies for colcon, while the latter does the same for CMake. Hence, any dependency additions have to be manually made in both files.
+
+#### Creating the Ada project
+
+The RCLAda project defines CMake functions to simplify integration of GNAT projects. Firstly, we will create an empty Ada project. Do it the way you would normally do. For example:
+
+* If you have `alr` installed, enter the `my_ada_package` folder and run `alr init --bin ada_code`. This will create an `ada_code` nested folder with a ready-to-use GNAT project.
+* If you do not have `alr`, you can run `gnat-gps` or `gnatstudio` and, in the welcome window, choose `"Create a new project..."`. Then, select the basic simple Ada project:
+  ![image-20210529211258051](/home/jano/prog/ada4ros2/src/tutorial_aeic21/resources/image-20210529211258051.png)
+  * It is recommended to place the new project in its own subfolder. This way, several projects can cohabit inside one ROS2 package.
+
+Verify that you can build the project, either using the GUI options or by running `gprbuild` inside the project folder.
+
+We need now to include this project in the build process of ROS2. To do so,
+
+1. ​	Add the following lines to the end of the `my_ada_package/CMakeLists.txt`file:
+
+   ```cmake
+   ada_begin_package()	# Retrieves Ada context from other Ada packages that are dependencies
+   
+   ada_add_executables(
+   	ada_code	# This is a CMake target name, so anything goes.
+   	${PROJECT_SOURCE_DIR}/ada_code 
+   				# ABSOLUTE path to the GNAT project root inside the package.
+   				# By using ${PROJECT_SOURCE_DIR} provided by CMake, we ensure the proper
+                   #   location is picked even if the repository is moved.
+       obj         # Relative path to the binary output, as defined in the GPR project file.
+       main		# Executables built by your Ada project, without path.
+       )
+   
+   ada_end_package()	# Exports the updated Ada context for possible dependent packages.
+   ```
+
+   **NOTE**  that the second argument to `ada_add_executables` must be adjusted for the place were you created your GNAT project inside the package. `${PROJECT_SOURCE_DIR}` points to the `CMakeLists.txt` file containing folder, so it is handy for this purpose.
+
+   **NOTE** that the third argument is the relative path defined in your GPR file with the `for Object_Dir use "obj";` (default location for projects created with `gnat-gps` or `or Executable_Dir use "bin";` (default location for projects created with `alr`).
+
+   > The `ada_add_executables` ensures that the Ada environment is imported/exported properly in regard to other Ada ROS2 packages. Also it places the resulting executables where ROS2 expects to find them.
+
+2. Run `colcon build --packages-up-to my_ada_package` until you get no errors. If you *do* get errors, remove the `build` and `install ` folders before invoking colcon, as otherwise old versions of your `CMakeFiles.txt` can be used unexpectedly.
+
+3. Source the environment:
+   `source install/setup.bash`
+
+4. Run your executable (adjust for the name you actually used for it -- also try using TAB completion):
+   `ros2 run my_ada_package main`
+
+5. Edit your main file so it prints something, and verify the changes by rebuilding and running your very first ROS2 executable.
+
+**CONGRATULATIONS!** It may seem a trivial step, but having your Ada code built in the context of other ROS2 packages is no small feature, and the very first step needed to build actual robotics code.
+
+### 1.4 Edit with VSCode
+
+Now that we have a foundation to start doing actual code, usually we will do so using a GUI (if you are happy with editors like `vim`, you obviously can simply go ahead with it and build from another terminal.
+
+Assuming you want a graphical alternative, the first stop may be the now popular VSCode. It has the advantage of many plugins (including one for Ada), and flexible task definitions. Also, as VSCode does not depend on successfully loading a GNAT project file, it is an excellent fallback when problems arise with GNATstudio/GPS in that regard.
+
+> If you wonder why a project file would not load, the trouble in the ROS2 context is that there is file generation involved. Any error in the `colcon build` process may leave us with an incomplete set of files/projects, and *opening* a project in that situation with GNAT is impossible.
+
+If you do not have VSCode installed, you can get it with:
+
+* `snap install code`
+
+The recommended route is to use `File -> Open folder...` to open the `ada4ros2` repository root, and have easy navigation around all repository files in all the contained ROS2 packages.
+
+There are already some tasks defined in the `ada4ros2/.vscode` folder to build, clean & build, update the build and build only the current file by using `Terminal -> Run task...`
+
+### 1.5 Edit and compile with GNATstudio/GPS
 
 ## 2. Blackboard communication (topics/publishers/subscriptions)
 
