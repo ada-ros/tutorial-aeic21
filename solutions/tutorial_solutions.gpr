@@ -1,9 +1,9 @@
 with "rcl";
 with "ros2_interfaces_rclada";
-with "ros2_interfaces_tutorial_aeic21";
+with "ros2_interfaces_tutorial_solutions";
 with "tf2_ros";
 
-project Tut21_Solutions is
+project Tutorial_Solutions is
 
    for Create_Missing_Dirs use "True";
 
@@ -58,4 +58,4 @@ project Tut21_Solutions is
       for Switches ("ada") use ("-g"); -- -rdynamic?
    end Linker;
 
-end Tut21_Solutions;
+end Tutorial_Solutions;

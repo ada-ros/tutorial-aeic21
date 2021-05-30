@@ -8,12 +8,12 @@ with Common;
 --  with RCL.Logging;
 with RCL.Nodes;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist;
 with ROSIDL.Types;
 with ROSIDL.Typesupport;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Exercises;
 
 procedure Turtlesim_Commander is
 

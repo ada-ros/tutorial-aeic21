@@ -8,14 +8,14 @@ with Common;
 --  with RCL.Logging;
 with RCL.Nodes;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Twist;
 with ROSIDL.Types;
 with ROSIDL.Typesupport;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Solutions;
 
-procedure Epuck_Commander is
+procedure Sol_Turtlesim_Commander is
 
    use type ROSIDL.Types.Float64;
 
@@ -28,7 +28,7 @@ procedure Epuck_Commander is
    package Pub is new Nodes.Typed_Publish
       (Handling => Geometry_Msgs.Messages.Twist.Handling,
        Node     => Node,
-       Topic    => "/cmd_vel");
+       Topic    => "/turtle1/cmd_vel");
 
    Msg_Move : Geometry_Msgs.Messages.Twist.Handling.Message;
 
@@ -85,4 +85,4 @@ begin
                    & Common.Emph (Fixed (Msg_Move.Data.Angular.Z)'Image));
       end;
    end loop;
-end Epuck_Commander;
+end Sol_Turtlesim_Commander;

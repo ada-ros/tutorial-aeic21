@@ -9,17 +9,17 @@ with RCL.Nodes;
 with RCL.Subscriptions;
 with RCL.QoS;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Posestamped;
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
-with ROSIDL.Static.Tutorial_Aeic21.Nav_Msgs.Messages.Odometry;
-with ROSIDL.Static.Tutorial_Aeic21.Sensor_Msgs.Messages.Laserscan;
+with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Posestamped;
+with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Solutions.Nav_Msgs.Messages.Odometry;
+with ROSIDL.Static.Tutorial_Solutions.Sensor_Msgs.Messages.Laserscan;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Solutions;
 
 with VFH;
 
-procedure Turtlebot_VFH is
+procedure Sol_Turtlebot_VFH is
 
    Node : Nodes.Node'Class := Nodes.Init;
 
@@ -136,4 +136,4 @@ begin
    loop
       Node.Spin (During => Forever);
    end loop;
-end Turtlebot_VFH;
+end Sol_Turtlebot_VFH;

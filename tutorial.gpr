@@ -8,7 +8,7 @@ aggregate project Tutorial is
    for Create_Missing_Dirs use "True";
 
    for Project_Files use
-     ("tut21_exercises.gpr",
-      "tut21_solutions.gpr");
+     ("exercises/tutorial_exercises.gpr",
+      "solutions/tutorial_solutions.gpr");
 
 end Tutorial;

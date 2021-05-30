@@ -12,13 +12,13 @@ with RCL.Nodes;
 with RCL.Subscriptions;
 with RCL.QoS;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
-with ROSIDL.Static.Tutorial_Aeic21.Sensor_Msgs.Messages.Laserscan;
+with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Exercises.Sensor_Msgs.Messages.Laserscan;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Exercises;
 
-procedure Sol_Turtlebot_Wander is
+procedure Turtlebot_Wander is
 
    Rnd : Ada.Numerics.Float_Random.Generator;
 
@@ -129,4 +129,4 @@ begin
 
       Pub.Publish (Msg_Move);
    end loop;
-end Sol_Turtlebot_Wander;
+end Turtlebot_Wander;

@@ -4,14 +4,14 @@ with Ada.Numerics;
 with RCL.Logging;
 with RCL.Nodes;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist;
 with ROSIDL.Types;
 with ROSIDL.Typesupport;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Exercises;
 
-procedure Sol_Turtlesim_Mosaic is
+procedure Turtlesim_Mosaic is
 
    use type ROSIDL.Types.Float64;
 
@@ -50,4 +50,4 @@ begin
       --  Convert to Duration just to get fixed point display
       delay 1.0;
    end loop;
-end Sol_Turtlesim_Mosaic;
+end Turtlesim_Mosaic;

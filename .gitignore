@@ -1,2 +1,5 @@
+*.db
+*-loc.xml
 bin/
+gnatinspect*
 obj/

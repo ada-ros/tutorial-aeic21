@@ -2,12 +2,12 @@ with Ada.Numerics.Elementary_Functions; use Ada.Numerics;
 
 with RCL.TF2;
 
-with ROSIDL.Static.Tutorial_Aeic21.Sensor_Msgs.Messages.Laserscan;
+with ROSIDL.Static.Tutorial_Exercises.Sensor_Msgs.Messages.Laserscan;
 with ROSIDL.Types;
 
 package VFH is
 
-   use ROSIDL.Static.Tutorial_Aeic21;
+   use ROSIDL.Static.Tutorial_Exercises;
 
    subtype Real is ROSIDL.Types.Float64; use type Real;
 

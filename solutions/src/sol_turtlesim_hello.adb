@@ -4,13 +4,13 @@ with RCL.Logging;
 with RCL.Nodes;
 with RCL.Utils;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Twist;
 with ROSIDL.Types;
 
 procedure Sol_Turtlesim_Hello is
 
    use RCL;
-   use ROSIDL.Static.Tutorial_Aeic21;
+   use ROSIDL.Static.Tutorial_Solutions;
    use all type ROSIDL.Types.Float64;
 
    MsgDraw,

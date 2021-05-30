@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(tutorial_aeic21 VERSION 0.1.0)
+project(tutorial_exercises VERSION 0.1.0)
 
 find_package(rclada_common REQUIRED)
 ada_begin_package()
@@ -18,10 +18,10 @@ ada_import_interfaces(
         turtlesim)
 
 ada_add_executables(
-        tut21_exercises # CMake target
-        ${PROJECT_SOURCE_DIR}/gpr_exercises
+        exercises               # CMake target
+        ${PROJECT_SOURCE_DIR}   # GPR is right in the root of the package
         bin
-        client_async 
+        client_async
         client_sync
         epuck_commander
         epuck_wander
@@ -36,26 +36,5 @@ ada_add_executables(
         turtlesim_commander
         turtlesim_hello
         turtlesim_mosaic)
-
-ada_add_executables(
-        tut21_solutions # CMake target
-        ${PROJECT_SOURCE_DIR}/gpr_solutions
-        bin
-
-        sol_client_async 
-        sol_client_sync
-        sol_epuck_commander
-        sol_epuck_wander
-        sol_publisher_dynamic
-        sol_publisher_static
-        sol_server_example
-        sol_subscriber_dynamic
-        sol_subscriber_static
-        sol_turtlebot_vfh
-        sol_turtlebot_vfh_tf2
-        sol_turtlebot_wander
-        sol_turtlesim_commander
-        sol_turtlesim_hello
-        sol_turtlesim_mosaic)
 
 ada_end_package()

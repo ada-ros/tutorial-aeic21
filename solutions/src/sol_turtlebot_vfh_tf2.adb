@@ -8,18 +8,19 @@ with RCL.Logging;
 with RCL.Nodes;
 with RCL.Subscriptions;
 with RCL.QoS;
+with RCL.TF2;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Posestamped;
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
-with ROSIDL.Static.Tutorial_Aeic21.Nav_Msgs.Messages.Odometry;
-with ROSIDL.Static.Tutorial_Aeic21.Sensor_Msgs.Messages.Laserscan;
+with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Posestamped;
+with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Solutions.Nav_Msgs.Messages.Odometry;
+with ROSIDL.Static.Tutorial_Solutions.Sensor_Msgs.Messages.Laserscan;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Solutions;
 
 with VFH;
 
-procedure Sol_Turtlebot_VFH is
+procedure Sol_Turtlebot_VFH_TF2 is
 
    Node : Nodes.Node'Class := Nodes.Init;
 
@@ -68,6 +69,7 @@ procedure Sol_Turtlebot_VFH is
       pragma Unreferenced (Node, Info);
       use Common;
    begin
+      Logging.Warn ("FRAME is " & Types.Get_String (Msg.Header.Frame_Id));
       if Have_Goal and then Have_Pose then
          declare
             Cmd_Vel : constant VFH.Velocity2D := VFH.Steer
@@ -134,6 +136,38 @@ begin
    Logging.Info ("Ready to see the world.");
 
    loop
-      Node.Spin (During => Forever);
+      Node.Spin (During => 1.0);
+      declare
+         From : constant String := "LDS-01_rotated";
+         Into : constant String := "base_link";
+      begin
+         declare
+            Point1 : constant TF2.Point3D :=
+                       TF2.Transform ((1.0, 0.0, 0.0),
+                                      Into => Into,
+                                      From => From);
+            Point2 : constant TF2.Point3D :=
+                       TF2.Transform ((1.0, 1.0, 0.0),
+                                      Into => Into,
+                                      From => From);
+            Point3 : constant TF2.Point3D :=
+                       TF2.Transform ((0.0, 1.0, 0.0),
+                                      Into => Into,
+                                      From => From);
+         begin
+            Logging.Warn ("TF1 "
+                          & From & " --> " & Into & ": "
+                          & TF2.Image (Point1));
+            Logging.Warn ("TF2 "
+                          & From & " --> " & Into & ": "
+                          & TF2.Image (Point2));
+            Logging.Warn ("TF3 "
+                          & From & " --> " & Into & ": "
+                          & TF2.Image (Point3));
+         end;
+      exception
+         when others =>
+            Logging.Warn ("Cant transform " & From & " --> " & Into);
+      end;
    end loop;
-end Sol_Turtlebot_VFH;
+end Sol_Turtlebot_VFH_TF2;

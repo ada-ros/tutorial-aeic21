@@ -8,14 +8,14 @@ with Common;
 --  with RCL.Logging;
 with RCL.Nodes;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist;
 with ROSIDL.Types;
 with ROSIDL.Typesupport;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Exercises;
 
-procedure Sol_Epuck_Commander is
+procedure Epuck_Commander is
 
    use type ROSIDL.Types.Float64;
 
@@ -85,4 +85,4 @@ begin
                    & Common.Emph (Fixed (Msg_Move.Data.Angular.Z)'Image));
       end;
    end loop;
-end Sol_Epuck_Commander;
+end Epuck_Commander;

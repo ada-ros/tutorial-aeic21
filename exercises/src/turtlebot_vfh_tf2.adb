@@ -10,13 +10,13 @@ with RCL.Subscriptions;
 with RCL.QoS;
 with RCL.TF2;
 
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Posestamped;
-with ROSIDL.Static.Tutorial_Aeic21.Geometry_Msgs.Messages.Twist;
-with ROSIDL.Static.Tutorial_Aeic21.Nav_Msgs.Messages.Odometry;
-with ROSIDL.Static.Tutorial_Aeic21.Sensor_Msgs.Messages.Laserscan;
+with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Posestamped;
+with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist;
+with ROSIDL.Static.Tutorial_Exercises.Nav_Msgs.Messages.Odometry;
+with ROSIDL.Static.Tutorial_Exercises.Sensor_Msgs.Messages.Laserscan;
 
 use RCL;
-use ROSIDL.Static.Tutorial_Aeic21;
+use ROSIDL.Static.Tutorial_Exercises;
 
 with VFH;
 
