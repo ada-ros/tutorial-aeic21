@@ -143,7 +143,7 @@ The Gitpod session already has ROS2 preinstalled, and the underlying Docker is a
 
 NOTE: this approach is only recommended for users already familiar with docker, and that already have docker installed.
 
-A slightly more powerful alternative to Gi is to use a Docker image that already contains the ROS2 environment. This may allow to successfully follow the tutorial in another Linux other than Ubuntu 20.04. The image tag is `mosteo/ada4ros2:foxy`
+A slightly more powerful alternative to GitPod is to use a Docker image that already contains the ROS2 environment. This may allow to successfully follow the tutorial in another Linux other than Ubuntu 20.04. The image tag is `mosteo/ada4ros2:foxy`
 
 This image contains some graphical packages (like `turtlesim`) which enable the realization of a few more exercises. Still, the exercises involving the full blown simulator cannot be carried out this way.
 
@@ -263,7 +263,7 @@ The RCLAda project defines CMake functions to simplify integration of GNAT proje
 
 * If you have `alr` installed, enter the `my_ada_package` folder and run `alr init --bin ada_code`. This will create an `ada_code` nested folder with a ready-to-use GNAT project.
 * If you do not have `alr`, you can run `gnat-gps` or `gnatstudio` and, in the welcome window, choose `"Create a new project..."`. Then, select the basic simple Ada project:
-  ![image-20210529211258051](Exercises.assets/image-20210529211258051.png)
+  ![image-20210529211258051](/home/user/prog/ada4ros2/src/tutorial_aeic21/resources/image-20210529211258051.png)
   * It is recommended to place the new project in its own subfolder. This way, several projects can cohabit inside one ROS2 package.
 
 Verify that you can build the project, either using the GUI options or by running `gprbuild` inside the project folder.
@@ -375,15 +375,49 @@ In this block we have seen, firstly, how to create a new ROS2 package and how to
 
 ## 2. Blackboard communication (topics/publishers/subscriptions)
 
-### Using RCLAda dynamic messages
+From this point on, all exercises are ROS2 nodes written in Ada. Each exercise source code is provided twice:
 
-TODO: explanation (not actually an exercise)
+1. In project `ada4ros2/src/tutorial_aeic21/gpr_exercises/tut21_exercises.gpr`
+   * These files are intended to guide you via comments on the objectives of the exercise, and to have a file ready to start without requiring you to create a new package, Ada project, etc. The intention is that you edit these files directly to complete the exercise.
+2. In project `ada4ros2/src/tutorial_aeic21/gpr_tutorials/tut21_solutions.gpr`
+   * The files in this project are prefixed with `sol_` and are a reference implementation of the exercise. You can use these to get ideas, check the intended behavior of the result, quickly try modifications on a complete solution, etc.
 
-### Using RCLAda static messages
+For convenient edition/comparison of any of these files, the project `ada4ros2/src/tutorial_aeic21/tutorial.gpr` is recommended. It is an aggregate project that merely includes both `tut21_*.gpr` projects.
 
-TODO: explanation (not actually an exercise)
+> This `tutorial.gpr` project file 
 
-### Writing a Publisher, dynamic version
+In summary, from the `ada4ros2` repository root:
+
+1. `colcon build`
+2. `source <(./printenv_ada)`
+3. `gnat-gps -P src/tutorial_aeic21/tutorial.gpr`
+
+### Using RCLAda dynamic vs static messages
+
+For technical reasons, RCLAda offers two ways of accessing information in a ROS2 message:
+
+1. Through runtime introspection, with a small runtime overhead, but with full guarantees that the worst that can happen is an exception when erroneous access is attempted.
+2. Through record types generated during the build, following ROS tradition. Improper use of these types may result in unguarded accesses to invalid memory, as they closely match C memory layouts. This is, however, the expected usage. Future releases of RCLAda will improve the safety aspect of this approach.
+
+For the exercises in this block 2, and to get acquainted with both methods, it is recommended to complete either exercises 2.1+2.4 or 2.2+2.3.
+
+* 2.1/2.2 do the same, but using the dynamic/static version.
+* 2.3/2.4 do the same, but using the dynamic/static version.
+* In tandem, you will be creating a publisher and a subscriber able to relay and receive information.
+
+For each exercise you will receive this information here (and the comments in the exercise main file):
+
+- Objective: *A brief description of the purpose of the exercise and learning goal.*
+- Main file:  The name of the Ada file to be completed; e.g., `cool_exercise.adb`. This means that a `sol_cool_exercise.adb` also exists with the complete implementation.
+- APIs: A list of `project.gpr/specification.ads` files that are relevant to the completion of the exercise, and that have not appeared before. 
+- Tools: A list of command-line commands from ROS2 that can be helpful for the exercise. Running them without arguments or with `--help` to get details is recommended.
+
+### 2.1 Writing a Publisher, dynamic version
+
+- Objective:
+- Main file: 
+- APIs:
+- Tools:
 
 publisher_dynamic.adb
 
@@ -391,11 +425,11 @@ Verify with `ros2 topic echo <topic>`
 
 Also `ros2 topic {info|type}`
 
-### Writing a Publisher, static version
+### 2.2 Writing a Publisher, static version
 
 publisher_static.adb
 
-### Writing a Subscriber, dynamic version
+### 2.3 Writing a Subscriber, dynamic version
 
 subscriber_dynamic.adb
 
@@ -403,7 +437,7 @@ $ ros2 topic pub /chatter std_msgs/msg/String 'data: "hello"'
 
 See that autocompletion works for ros2 topic etc.
 
-### Writing a Subscriber, static version
+### 2.4 Writing a Subscriber, static version
 
 subscriber_static.adb
 

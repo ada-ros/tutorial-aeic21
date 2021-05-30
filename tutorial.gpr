@@ -1,0 +1,14 @@
+aggregate project Tutorial is
+
+   --  This file is intended to be opened after running:
+   --  $ colcon build
+   --  $ source <(./printenv_ada)
+   --  at the root of the ada4ros2 repository.
+
+   for Create_Missing_Dirs use "True";
+
+   for Project_Files use
+     ("tut21_exercises.gpr",
+      "tut21_solutions.gpr");
+
+end Tutorial;
