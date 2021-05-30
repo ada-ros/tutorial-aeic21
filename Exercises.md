@@ -410,74 +410,171 @@ For the exercises in this block 2, and to get acquainted with both methods, it i
 
 For each exercise you will receive this information here (and the comments in the exercise main file):
 
-- Objective: *A brief description of the purpose of the exercise and learning goal.*
-- Main file:  The name of the Ada file to be completed; e.g., `cool_exercise.adb`. This means that a `sol_cool_exercise.adb` also exists with the complete implementation.
-- APIs: A list of `project.gpr/specification.ads` files that are relevant to the completion of the exercise, and that have not appeared before. 
-- Tools: A list of command-line commands from ROS2 that can be helpful for the exercise. Running them without arguments or with `--help` to get details is recommended.
+- **Objective**: *A brief description of the purpose of the exercise and learning goal.*
+- **Main file**:  The name of the Ada file to be completed; e.g., `cool_exercise.adb`. This means that a `sol_cool_exercise.adb` also exists with the complete implementation.
+- **APIs**: A list of `project.gpr/specification.ads` files that are relevant to the completion of the exercise, and that have not appeared before. 
+- **Tools**: A list of command-line commands from ROS2 that can be helpful for the exercise. Running them without arguments or with `--help` to get details is recommended.
+- **Notes**: any additional information.
 
 ### 2.1 Writing a Publisher, dynamic version
 
-- Objective:
-- Main file: 
-- APIs:
-- Tools:
-
-publisher_dynamic.adb
-
-Verify with `ros2 topic echo <topic>`
-
-Also `ros2 topic {info|type}`
+- **Objective**: *Create a publisher of type `std_msgs/String` and publish an string using it. Use only dynamic message facilities.*
+- **Main file**:  `publisher_dynamic.adb`
+- **APIs**:
+  - `rcl.gpr/rcl-logging.ads`
+  - `rcl.gpr/rcl-nodes.ads`
+  - `rcl.gpr/rcl-publishers.ads` 
+  - `rosidl.gpr/rosidl-dynamic.ads` 
+  - `rosidl.gpr/rosidl-typesupport.ads` 
+- **Tools**: `ros2 topic`
+  - Verify that your node works with `ros2 topic echo <topic>`
+  - Also `ros2 topic {info|type} [-v]` is useful to check a topic information.
 
 ### 2.2 Writing a Publisher, static version
 
-publisher_static.adb
+- **Objective**: *Create a publisher of type `std_msgs/String` and publish an string using it. Use static messages already generated in the `rclada` package (`std_msgs/String`).*
+- **Main file**:  `publisher_static.adb`
+- **APIs**:
+  - `rcl.gpr/rcl-logging.ads`
+  - `rcl.gpr/rcl-nodes.ads`
+  - `rosidl.gpr/rosidl-types.ads` 
+  - `ros2_interfaces_rclada.gpr/ROSIDL.Static.Rclada.Std_Msgs.Messages.String`
+- **Tools**: `ros2 topic`
+  - Verify that your node works with `ros2 topic echo <topic>`
+  - Also `ros2 topic {info|type} [-v]` is useful to check a topic information.
 
 ### 2.3 Writing a Subscriber, dynamic version
 
-subscriber_dynamic.adb
-
-$ ros2 topic pub /chatter std_msgs/msg/String 'data: "hello"'
-
-See that autocompletion works for ros2 topic etc.
+- **Objective**: *Create a subscriber of type `std_msgs/String` and read  and echo incoming strings. Use only dynamic message facilities.*
+- **Main file**:  `subscriber_dynamic.adb`
+- **APIs**:
+  - `rcl.gpr/rcl-logging.ads`
+  - `rcl.gpr/rcl-nodes.ads`
+  - `rosidl.gpr/rosidl-dynamic.ads` 
+  - `rosidl.gpr/rosidl-typesupport.ads` 
+- **Tools**: `ros2 topic`
+  - Verify that your node works with `ros2 topic pub /chatter std_msgs/msg/String 'data: "hello"'`
+    - See how TAB autocompletion works for every part of `ros2 topic`.
+  - Verify that your subscriber can also hear your publisher from tasks 2.1/2.2.
 
 ### 2.4 Writing a Subscriber, static version
 
-subscriber_static.adb
+- **Objective**: *Create a subscriber of type `std_msgs/String` and read  and echo incoming strings. Use static messages already generated in the `rclada` package (`std_msgs/String`).*
+- **Main file**:  `subscriber_static.adb`
+- **APIs**:
+  - `rcl.gpr/rcl-logging.ads`
+  - `rcl.gpr/rcl-nodes.ads`
+  - `rosidl.gpr/rosidl-types.ads` 
+  - `ros2_interfaces_rclada.gpr/ROSIDL.Static.Rclada.Std_Msgs.Messages.String`
+- **Tools**: `ros2 topic`
+  - Verify that your node works with `ros2 topic pub /chatter std_msgs/msg/String 'data: "hello"'`
+    - See how TAB autocompletion works for every part of `ros2 topic`.
+  - Verify that your subscriber can also hear your publisher from tasks 2.1/2.2.
 
 ### TurtleSim: first steps
 
-(TODO: slide with turtle + axes)
+Using the *TurtleSim* simulator it is possible to practice control notions of actual robots. From this point on, all solutions will use static messages.
 
-`ros2 run turtlesim turtlesim_node`
+### 2.5 Launching a *TurtleSim* and identifying relevant information
 
-`ros2 topic list`
+In this exercise you will get to know this basic simulator in preparation for the following exercises.
 
-Identify `/turtle1/cmd_vel`, `/turtle1/pose`
+1. Launch an instance of the simulator with
+   `ros2 run turtlesim turtlesim_node`
 
-Identify type of these topics with `ros2 topic type`
+2. Inspect the topics that it creates for communication
+   `ros2 topic list`
 
-`geometry_msgs/msg/Twist`
-`turtlesim/msg/Pose`
+3. Identify basic information of the topics `/turtle1/cmd_vel` and `/turtle1/pose` using `ros2 topic info`
 
-Do a fixed sequence (parameterized?)
+   * You will find that these topics use messages of type `geometry_msgs/msg/Twist` and `turtlesim/msg/Pose`, respectively.
 
-Create a remote controller
+4. Display the composition of the `turtlesim/msg/Pose` message with `ros2 interface show`.
 
-Improve the remote controller by showing the current pose (with colors!)
+   * You should get this output:
 
-- Draw some figure
+     ```
+     float32 x
+     float32 y
+     float32 theta
+     
+     float32 linear_velocity
+     float32 angular_velocity
+     ```
 
-### ePuck: first steps
+   * Compare this information with the contents of the files:
+
+     *  `/opt/ros/foxy/share/turtlesim/msg/Pose.msg`
+     * `/opt/ros/foxy/include/turtlesim/msg/detail/pose__struct.h`
+     * `./build/tutorial_solutions/rosidl_generator_ada/rosidl-static-tutorial_solutions-turtlesim-messages-pose.ads`
+
+5. Move the turtle manually from the command line with `ros2 topic pub` (remember the TAB completion!):
+
+   * ```
+     $ ros2 topic pub --times 1 /turtle1/cmd_vel geometry_msgs/msg/Twist "linear:
+       x: 1.0
+       y: 0.0
+       z: 0.0
+     angular:
+       x: 0.0
+       y: 0.0
+       z: 0.0"
+     ```
+
+### 2.6 Move the turtle in a fixed sequence
+
+- **Objective**: *Draw a figure or text using a predefined sequence of instructions.*
+- **Main file**:  `turtlesim_mosaic.adb`, `turtlesim_hello.adb`
+- **APIs**:
+  - `ros2_interfaces_tutorial_exercises.gpr/rosidl-static-tutorial_exercises-geometry_msgs-messages-twist.ads`
+  - **Note**: this project file and specification will not exist until you modify the `tutorial_exercises/CMakeLists.txt` file to import the interfaces from the `geometry_msgs` package.`
+    - To import the interfaces you need to use the `ada_import_interfaces` CMake function.
+- **Tools**: to conveniently rebuild only the `tutorial_exercises` ROS2 package from scratch you may use the `dev/make-package.sh <package>` script.
+- **Notes**: Since you need to import new interfaces for the first time, the steps to follow are:
+  1. Modify the `src/tutorial_exercises/CMakeLists.txt` file to import the required interfaces.
+  2. Build the package so the interfaces are generated: `colcon build --packages-select tutorial_exercises`
+     * **Verify** that the project file for the interfaces exist at the expected location: `./install/tutorial_exercises/share/gpr/ros2_interfaces_tutorial_exercises.gpr`
+  3. Edit the Ada node normally.
+
+### 2.7 Create a remote controller for the turtle
+
+- **Objective**: *Create a node that allows to drive the turtle with the keyboard*.
+- **Main file**:  `turtlesim_commander.adb`
+- **APIs**:
+  - `procedure Ada.Text_IO.Get_Immediate (Item : out Character; Available : out Boolean)`
+  - `ros2_interfaces_tutorial_exercises.gpr/rosidl-static-tutorial_exercises-geometry_msgs-messages-twist.ads`
+    - **Note**: this project file and specification will not exist until you modify the `src/tutorial/exercises/CMakeLists.txt` file to import the interfaces from the `geometry_msgs` package.
+    - To import the interfaces you need to use the `ada_import_interfaces` CMake function.
+- **Tools**: to conveniently rebuild only the `tutorial_exercises` ROS2 package from scratch you may use the `dev/make-package.sh <package>` script.
+
+### 2.8 Drive the *ePuck* robot
+
+The [ePuck robot](http://www.e-puck.org/) is a real educational robot that can be simulated with good fidelity with the [Webots simulator](https://cyberbotics.com/). You can launch an instance of the simulator with an ePuck ready to be commanded with:
 
 `ros2 launch webots_ros2_epuck robot_launch.py`
 
-Identify name and type of command topic. Conclusion?
+> The `launch` subcommand orchestrates the launch of possibly several nodes and sets up tunable parameters. This is out of the scope of the tutorial, and it suffices to know at this time that is a kind of "uber"-run.
 
-Update the remote controller of turtlesim to control the epuck
+Use the tools learned in exercise 2.5 to identify the available topics and their type. 
+
+> You will find that the ePuck, despite being real, unlike the turtle, is driven by the same `/cmd_vel` topic, using the same message type. Observe that the only difference is that TurtleSim prefixed the topic as `/turtle1/cmd_vel`, as several turtles may be created. In multi-robot, this kind of topic renaming is usual and ROS2 has ways to rename topics for this purpose.
+
+- **Objective**: *Create a node that allows to drive the ePuck with the keyboard.* 
+- **Main file**:  `epuck_commander.adb`
+- **APIs**:
+  - `procedure Ada.Text_IO.Get_Immediate (Item : out Character; Available : out Boolean)`
+  - `ros2_interfaces_tutorial_exercises.gpr/rosidl-static-tutorial_exercises-geometry_msgs-messages-twist.ads`
+    - **Note**: this project file and specification will not exist until you modify the `src/tutorial/exercises/CMakeLists.txt` file to import the interfaces from the `geometry_msgs` package.
+    - To import the interfaces you need to use the `ada_import_interfaces` CMake function.
+- **Tools**: to conveniently rebuild only the `tutorial_exercises` ROS2 package from scratch you may use the `dev/make-package.sh <package>` script.
 
 ### Conclusion
 
+In this section we have seen how most communications take place in the ROS2 framework, and how the information can be published and retrieved from Ada nodes. With this information, it is easy to program our first robots, which share the ROS2 convention of using the `/cmd_vel` topic to listen to commands.
+
 ## 3. RPC communication (services/servers/clients)
+
+Although topics are used for the bulk of sensor data, services are also used for low-frequency communications that require acknowledgement. In this section we will see the basic usage of ROS2 services
 
 ### Servers
 

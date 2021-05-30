@@ -17,7 +17,7 @@ procedure Sol_Turtlesim_Hello is
    MsgLin,
    MsgRot : Geometry_Msgs.Messages.Twist.Handling.Message;
 
-   Node : Nodes.Node'Class := Nodes.Init   (Utils.Command_Name);
+   Node : Nodes.Node'Class := Nodes.Init (Name => Utils.Command_Name);
 
 begin
    Logging.Info ("Turtlesim Hello starting...");

@@ -5,7 +5,6 @@ with ANSI;
 
 with Common;
 
---  with RCL.Logging;
 with RCL.Nodes;
 
 with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Twist;
@@ -59,6 +58,8 @@ procedure Sol_Turtlesim_Commander is
    end Keypress;
 
 begin
+   Put_Line ("TurtleSim commander ready: use keys A, S, D, F, space");
+
    loop
       Pub.Publish (Msg_Move);
 
