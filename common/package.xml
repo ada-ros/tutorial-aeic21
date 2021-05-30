@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>tutorial_common</name>
+  <version>0.1.0</version>
+  <description>Code common to exercises and solutions</description>
+  <maintainer email="amosteo@unizar.es">jano</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclada_common</depend>
+  <depend>rclada</depend>
+  <depend>rclada_tf2</depend>
+  <depend>rosidl_generator_ada</depend>
+  <depend>sensor_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

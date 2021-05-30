@@ -13,9 +13,10 @@ with RCL.TF2;
 with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Posestamped;
 with ROSIDL.Static.Tutorial_Solutions.Geometry_Msgs.Messages.Twist;
 with ROSIDL.Static.Tutorial_Solutions.Nav_Msgs.Messages.Odometry;
-with ROSIDL.Static.Tutorial_Solutions.Sensor_Msgs.Messages.Laserscan;
+with ROSIDL.Static.Tutorial_Common.Sensor_Msgs.Messages.Laserscan;
 
 use RCL;
+use ROSIDL.Static.Tutorial_Common;
 use ROSIDL.Static.Tutorial_Solutions;
 
 with VFH;

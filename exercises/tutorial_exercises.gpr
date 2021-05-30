@@ -1,5 +1,6 @@
 with "rcl";
 with "ros2_interfaces_tutorial_exercises";
+with "tutorial_common";
 with "tf2_ros";
 
 project Tutorial_Exercises is

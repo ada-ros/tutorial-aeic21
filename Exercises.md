@@ -187,18 +187,19 @@ Steps 1 and 2 can be jump-started by using the `ros2 pkg` subcommands. Follow th
 
    1. `colcon graph`
 
-      * The previous command should show the following output:
+      * The previous command should show output similar to:
 
         ```
-        rclada_common           +***...**
-        my_ada_package           +       
-        rosidl_generator_ada      +*....*
-        rclada                     +*****
-        rclada_client_skeleton      +    
-        rclada_examples              +   
-        rclada_fosdem20               +  
-        rclada_tf2                     +*
-        tutorial_aeic21                 +
+        rclada_common             +***...***
+        my_ada_package_            +        
+        rosidl_generator_ada        +*....**
+        rclada                       +******
+        rclada_client_skeleton        +     
+        rclada_examples                +    
+        rclada_fosdem20                 +   
+        rclada_tf2                       +**
+        tutorial_exercises                + 
+        tutorial_solutions                 +
         ```
 
       * Note how our package depends on `rclada_common`, as we requested during creation.
@@ -263,7 +264,7 @@ The RCLAda project defines CMake functions to simplify integration of GNAT proje
 
 * If you have `alr` installed, enter the `my_ada_package` folder and run `alr init --bin ada_code`. This will create an `ada_code` nested folder with a ready-to-use GNAT project.
 * If you do not have `alr`, you can run `gnat-gps` or `gnatstudio` and, in the welcome window, choose `"Create a new project..."`. Then, select the basic simple Ada project:
-  ![image-20210529211258051](/home/user/prog/ada4ros2/src/tutorial_aeic21/resources/image-20210529211258051.png)
+  ![image-20210529211258051](Exercises.assets/image-20210529211258051.png)
   * It is recommended to place the new project in its own subfolder. This way, several projects can cohabit inside one ROS2 package.
 
 Verify that you can build the project, either using the GUI options or by running `gprbuild` inside the project folder.
@@ -324,6 +325,8 @@ There are already some tasks defined in the `ada4ros2/.vscode` folder to build, 
 
 Another straightforward possibility is to run `colcon` from the terminal embedded in VSCode.
 
+>  VSCode by itself, with the Ada plugin, has some awareness of Ada syntax. To obtain full advantages from the Ada Language Server, a project file should be defined, in `.vscode/settings.json`, entry `ada.projectFile`.  This has already been set up for this tutorial. This project file should provide the complete environment, or the environment should exist when launching `code` from the command line. For this reason, it is strongly recommended to open VSCode after a successful `colcon build`.
+
 ### 1.5 Edit and compile with GNATstudio/GPS
 
 You may start to realize that running `colcon build` every time and then navigating to errors by hand is going to be a suboptimal experience. The optimal situation, if you are already an user of GNATstudio/GPS, would be to be able to use them as with regular Ada standalone projects.
@@ -337,9 +340,9 @@ Just as an example, we will open the project containing the solutions to the rem
 
 2. Run the `printenv_ada` script  to inspect the environment that is needed to build/load projects with gnatstudio/gprbuild:
    `./printenv_ada`
-   The output should be something like:
+   The output should be something similar to:
 
-   > export GPR_PROJECT_PATH="/home/user/prog/ada4ros2/src/rclada_client_skeleton:/home/user/prog/ada4ros2/src/rclada_common/gpr_aaa:/home/user/prog/ada4ros2/src/rclada_common/gpr_ament:/home/user/prog/ada4ros2/src/rclada_common/gpr_c_builtins:/home/user/prog/ada4ros2/src/rclada_common/gpr_cstrings:/home/user/prog/ada4ros2/src/rclada_examples:/home/user/prog/ada4ros2/src/rclada_fosdem20:/home/user/prog/ada4ros2/src/rclada/gpr_rcl:/home/user/prog/ada4ros2/src/rclada/gpr_selftest:/home/user/prog/ada4ros2/src/rclada_tf2/gpr_examples:/home/user/prog/ada4ros2/src/rclada_tf2/gpr_tf2_ros:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_c_typesupport:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_generator:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl/dl-ada:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl/dl-ada/cstrings:/home/user/prog/ada4ros2/src/tutorial_aeic21/gpr_exercises:/home/user/prog/ada4ros2/src/tutorial_aeic21/gpr_solutions:/home/user/prog/ada4ros2/install/rclada_common/share/gpr:/home/user/prog/ada4ros2/install/rclada_examples/share/gpr:/home/user/prog/ada4ros2/install/rclada_fosdem20/share/gpr:/home/user/prog/ada4ros2/install/rclada/share/gpr:/home/user/prog/ada4ros2/install/rclada_tf2/share/gpr:/home/user/prog/ada4ros2/install/rosidl_generator_ada/share/gpr:/home/user/prog/ada4ros2/install/tutorial_aeic21/share/gpr"
+   > export GPR_PROJECT_PATH="/home/user/prog/ada4ros2/src/my_ada_package_completed/ada_code:/home/user/prog/ada4ros2/src/rclada_client_skeleton:/home/user/prog/ada4ros2/src/rclada_common/gpr_aaa:/home/user/prog/ada4ros2/src/rclada_common/gpr_ament:/home/user/prog/ada4ros2/src/rclada_common/gpr_c_builtins:/home/user/prog/ada4ros2/src/rclada_common/gpr_cstrings:/home/user/prog/ada4ros2/src/rclada_examples:/home/user/prog/ada4ros2/src/rclada_fosdem20:/home/user/prog/ada4ros2/src/rclada/gpr_rcl:/home/user/prog/ada4ros2/src/rclada/gpr_selftest:/home/user/prog/ada4ros2/src/rclada_tf2/gpr_examples:/home/user/prog/ada4ros2/src/rclada_tf2/gpr_tf2_ros:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_c_typesupport:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_generator:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl/dl-ada:/home/user/prog/ada4ros2/src/rosidl_generator_ada/gpr_rosidl/dl-ada/cstrings:/home/user/prog/ada4ros2/src/tutorial:/home/user/prog/ada4ros2/src/tutorial/common:/home/user/prog/ada4ros2/src/tutorial/exercises:/home/user/prog/ada4ros2/src/tutorial/solutions:/home/user/prog/ada4ros2/install/rclada_common/share/gpr:/home/user/prog/ada4ros2/install/rclada_examples/share/gpr:/home/user/prog/ada4ros2/install/rclada_fosdem20/share/gpr:/home/user/prog/ada4ros2/install/rclada/share/gpr:/home/user/prog/ada4ros2/install/rclada_tf2/share/gpr:/home/user/prog/ada4ros2/install/rosidl_generator_ada/share/gpr:/home/user/prog/ada4ros2/install/tutorial_common/share/gpr:/home/user/prog/ada4ros2/install/tutorial_exercises/share/gpr:/home/user/prog/ada4ros2/install/tutorial_solutions/share/gpr"
 
    **NOTE**: the `printenv_ada` assumes that all packages are under `./src`.
 
@@ -348,9 +351,9 @@ Just as an example, we will open the project containing the solutions to the rem
 
 4. Open the project with the solutions in GNATstudio/gnat-gps
 
-   * With gnat-gps: `gnat-gps -P src/tutorial_aeic21/gpr_solutions/tut21_solutions.gpr`
+   * With gnat-gps: `gnat-gps -P src/tutorial/solutions/tutorial_solutions.gpr`
 
-   * With gnatstudio: `path/to/gnatstudio -P src/tutorial_aeic21/gpr_solutions/tut21_solutions.gpr`
+   * With gnatstudio: `path/to/gnatstudio -P src/tutorial/solutions/tutorial_solutions.gpr`
 
      * NOTE: the gnat compiler in the path should be the one in `/usr/bin` and not the one in the Community Edition; otherwise compilation will fail. You can verify the version in use from within gnatstudio by going to `Help -> About...`:
        ![image-20210530004922707](Exercises.assets/image-20210530004922707.png) 
@@ -365,7 +368,7 @@ Just as an example, we will open the project containing the solutions to the rem
    * **Note**: since the compilation is now happening *in-tree*, everything will be recompiled and the final executables will be in the source tree, and not in the `build` or `install ` folders. Keep this in mind to run the appropriate final binaries in case of changes.
    * The advantage of editing this way is that now `colcon` is not needed to make changes and rebuild, and `gprbuild` will indeed recompile only the required sources for any changes. This is in general much faster. Also, navigation through Ada sources with Ctrl+Click is much more robust in GNATstudio vs VSCode.
 
-6. Verify that only minimal recompilation is happening by opening, for example, `sol_publisher_static.adb` in the root project (`Tut21_Solutions`) and modifying some of the strings in there, and rebuilding like in the previous step.
+6. Verify that only minimal recompilation is happening by opening, for example, `sol_publisher_static.adb` in the root project (`Tutorial_Solutions`) and modifying some of the strings in there, and rebuilding like in the previous step.
 
    * Undo the changes after the test.
 
@@ -377,20 +380,20 @@ In this block we have seen, firstly, how to create a new ROS2 package and how to
 
 From this point on, all exercises are ROS2 nodes written in Ada. Each exercise source code is provided twice:
 
-1. In project `ada4ros2/src/tutorial_aeic21/gpr_exercises/tut21_exercises.gpr`
+1. In project `ada4ros2/src/tutorial/exercises/tutorial_exercises.gpr`
    * These files are intended to guide you via comments on the objectives of the exercise, and to have a file ready to start without requiring you to create a new package, Ada project, etc. The intention is that you edit these files directly to complete the exercise.
-2. In project `ada4ros2/src/tutorial_aeic21/gpr_tutorials/tut21_solutions.gpr`
+2. In project `ada4ros2/src/tutorial/solutions/tutorial_solutions.gpr`
    * The files in this project are prefixed with `sol_` and are a reference implementation of the exercise. You can use these to get ideas, check the intended behavior of the result, quickly try modifications on a complete solution, etc.
 
-For convenient edition/comparison of any of these files, the project `ada4ros2/src/tutorial_aeic21/tutorial.gpr` is recommended. It is an aggregate project that merely includes both `tut21_*.gpr` projects.
+For convenient edition/comparison of any of these files, the project `ada4ros2/src/tutorial/tutorial.gpr` is recommended. It is an aggregate project that merely includes both `tutorial_*.gpr` projects.
 
-> This `tutorial.gpr` project file 
+> This `tutorial.gpr` project file requires a previous successful build to find all required dependencies.
 
 In summary, from the `ada4ros2` repository root:
 
 1. `colcon build`
 2. `source <(./printenv_ada)`
-3. `gnat-gps -P src/tutorial_aeic21/tutorial.gpr`
+3. `gnat-gps -P src/tutorial/tutorial.gpr`
 
 ### Using RCLAda dynamic vs static messages
 

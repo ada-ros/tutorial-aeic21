@@ -10,6 +10,7 @@ find_package(rclada REQUIRED)
 find_package(rclada_tf2 REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(turtlesim REQUIRED)
+find_package(tutorial_common REQUIRED)
 
 ada_import_interfaces(
         geometry_msgs

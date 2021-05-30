@@ -14,6 +14,7 @@
   <depend>rosidl_generator_ada</depend>
   <depend>rclada</depend>
   <depend>rclada_tf2</depend>
+  <depend>tutorial_common</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
