@@ -574,31 +574,58 @@ In this section we have seen how most communications take place in the ROS2 fram
 
 ## 3. RPC communication (services/servers/clients)
 
-Although topics are used for the bulk of sensor data, services are also used for low-frequency communications that require acknowledgement. In this section we will see the basic usage of ROS2 services
+Although topics are used for the bulk of sensor data, services are also used for low-frequency communications that require acknowledgement. In this section we will see the basic usage of ROS2 services.
 
-### Servers
+### 3.1 Servers
 
-Server_Example
+- **Objective**: *Create a server that waits to be triggered (`std_srvs/srv/Trigger`).* 
+- **Main file**:  `server_example.adb`
+- **APIs**:
+  - `rcl.gpr/RCL.Nodes.Typed_Serve`
+  - `ros2_interfaces_rclada.gpr/ROSIDL.Static.Rclada.Std_Srvs.Services.Trigger`
+    - **Note**: this project file and specification already exists as it is imported by the `rclada` package.
+- **Tools**: `ros2 service`
+  - Inspect available services with `ros2 service list`.
+  - Identify the type of a service with `ros2 service type <service>`
+  - Identify the types of requests/responses of a service with `ros2 interface show <service>`
+  - Test your service with 
+    `$ ros2 service call /ada_service std_srvs/srv/Trigger {}`
+    - The empty JSON object, `{}`, can be omitted because the request is an empty message.
 
-Test with `$ ros2 service call /ada_service std_srvs/srv/Trigger {}`
+### 3.2 Asynchronous clients
 
-The last `{}` can be omitted: empty message.
+ROS2 provides only an asynchronous facility for RPC calls which client libraries can leverage to create higher-level abstractions. With RCLAda, you can use both asynchronous and a synchronous clients.
 
-### Asynchronous clients
+- **Objective**: *Create an asynchronous client for the server defined in 3.1 (`std_srvs/srv/Trigger`).* 
+- **Main file**:  `client_async.adb`
+- **APIs**:
+  - `rcl.gpr/RCL.Nodes.Typed_Client_Call_Proc`
+    - This is a generic that must be instantiated with the appropriate type and callback.
+  - `ros2_interfaces_rclada.gpr/ROSIDL.Static.Rclada.Std_Srvs.Services.Trigger`
+    - **Note**: this project file and specification already exists as it is imported by the `rclada` package.
+- **Notes**: although the reply will be received asynchronously, the call allows two timeouts, for the service to become available and for the call to get through. 
+  - Experiment with these timeouts. 
+    - Using no timeouts may result in calls being lost because topic discovery takes a few seconds.
+  - Experiment with launching the server before/after the client.
 
-Client_Async
+### 3.3 Synchronous clients
 
-Play with the different timeouts to see what happens. Play with launching the server before/after the client.
+- **Objective**: *Create a synchronous client for the server defined in 3.1 (`std_srvs/srv/Trigger`).* 
+- **Main file**:  `client_sync.adb`
+- **APIs**:
+  - `rcl.gpr/RCL.Nodes.Typed_Client_Call_Func`
+    - This is a generic that must be instantiated with the appropriate service type.
+  - `ros2_interfaces_rclada.gpr/ROSIDL.Static.Rclada.Std_Srvs.Services.Trigger`
+    - **Note**: this project file and specification already exists as it is imported by the `rclada` package.
+- **Notes**: as the response is received synchronously, there is no need to spin the node in this case.
 
-Warning after response is due to listener destruction
+### 3.4 Control the TurtleSim with service calls
 
-No timeouts may result in call lost because topic discovery take a few seconds. Wait with the node up for a while.
-
-### Synchronous clients
-
-Client_Sync
+The *TurtleSim* allows spawning more turtles and changing the pen color via service calls. Modify your `turtlesim_commander` to set different pen colors on demand.
 
 ### Conclusion
+
+In this section we have seen how RPC-like communication takes place in ROS2 and with RCLAda. These calls are usually used for important communications that should not be lost: changing configuration parameters, starting robot behaviors, etc.
 
 ## 4. Realistic exercises
 
@@ -618,9 +645,5 @@ https://blog.hadabot.com/ros2-navigation-tf2-tutorial-using-turtlesim.html
 
 ros2 run tf2_ros tf2_echo
 ros2 run tf2_ros tf2_monitor
-
-### Conclusion
-
-## 5. Defining your own messages
 
 ### Conclusion
