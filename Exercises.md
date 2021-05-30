@@ -629,21 +629,89 @@ In this section we have seen how RPC-like communication takes place in ROS2 and 
 
 ## 4. Realistic exercises
 
+In the last block of exercises we will see a couple of simple robotic behaviors: a Roomba-like wander (without wall following), and local navigation with obstacle avoidance.
+
 ### Wandering robot with obstacle avoidance (Roomba-like)
 
-Epuck_Wander
+One of the first behaviors that are tested in a robot is *wander*, which consists in moving randomly but avoiding frontal collisions. Depending on the sensor suite of the robot this can be achieved with more or less accuracy.
 
-Turtlebot_Wander
+### 4.1 Wandering ePuck
 
-### Navigate to a local goal (VFH local planner)
+The ePuck has two kinds of sensors that can help in this task: an array of sonar emitters/receivers, and a time-of-flight (ToF) range finder. The schematics can be consulted in this page: https://github.com/cyberbotics/webots_ros2/wiki/Tutorial-E-puck-for-ROS2-Beginners.
 
-Turtlebot_VFH
+Although the sonar may seem more complete, given the small size of the ePuck the ToF sensor is enough and simpler to get started, so it is recommended for this exercise.
 
-### Transformations
+- **Objective**: *Create a node that sends the ePuck in a wandering errand.  Suggestions:*
+  - *Move in a straight line until an obstacle is detected. Then, stop and rotate a random amount. Repeat.*  
+    - *Instead of always moving until obstacle detection, move up to a maximum time and then rotate.*
+  - *Further suggestions:*
+    - *Light the frontal leds when obstacles are detected*
+    - *Light the leds on the side to which the ePuck is rotating.*
+- **Main file**:  `epuck_wander.adb`
+- **APIs**:
+  - `Ada.Numerics.Float_Random`
+  - `ros2_interfaces_tutorial_exercises.gpr/ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist`
+  - `ros2_interfaces_tutorial_exercises.gpr/ROSIDL.Static.Tutorial_Exercises.Sensor_Msgs.Messages.Range_Data`
 
-https://blog.hadabot.com/ros2-navigation-tf2-tutorial-using-turtlesim.html
+### 4.2 Wandering TurtleBot
 
-ros2 run tf2_ros tf2_echo
-ros2 run tf2_ros tf2_monitor
+The TurtleBot (not to be confused with the TurtleSim) is an educational robot equipped with a 360º laser range finder. Also, it is a bit bigger than the ePuck, so relying only on a single straight reading will result in many collisions. 
+
+**NOTE**: the laser readings are published with "Best Effort" reliability. Your listener must be configured with the same Quality of Service or no readings will be received. (You can check these details with `ros2 topic info -v /scan`.) See related APIs below.
+
+- **Objective**: *Create a node that sends the TurtleBot in a wandering errand.  Use a range or readings in front of the robot to make navigation safer.*
+- **Main file**:  `turtlebot_wander.adb`
+- **APIs**:
+  - `rcl.gpr/RCL.Subscriptions`
+    - See the `Defaults` object to configure the Quality of Service.
+  - `rcl.gpr/RCL.QoS`
+    - See the `Profiles.Sensor_Data` profile that you will need to configure the scan subscriber.
+  - `Ada.Numerics.Float_Random`
+  - `ros2_interfaces_tutorial_exercises.gpr/ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist`
+  - `ros2_interfaces_tutorial_exercises.gpr/ROSIDL.Static.Tutorial_Exercises.Sensor_Msgs.Messages.Range_Data`
+- **Notes**:
+  - Launch the TurtleBot simulation with `ros2 launch webots_ros2_turtlebot robot_launch.py`
+
+### 4.3 Navigate to a local goal (VFH local planner)
+
+Local obstacle avoidance is a must in any robotic navigation stack. Depending on your previous experience, you might try to come up with your own local avoidance algorithm, or reuse the supplied Vector Field Histogram (VFH) algorithm, already tuned for the TurtleBot.
+
+- **Objective**: *Create a node that waits for a goal (in local coordinates). When received, steer the TurtleBot to it while avoiding collisions.*
+- **Main file**:  `turtlebot_VFH.adb`
+- **APIs**:
+  - `tutorial_common.gpr/VFH.Steer`
+    - Use the version that directly receives a raw LaserScan reading.
+  - `rcl.gpr/RCL.QoS`
+    - See the `Profiles.Sensor_Data` profile that you will need to configure the scan subscriber.
+  - `ros2_interfaces_tutorial_common.gpr/ROSIDL.Static.Tutorial_Common.Sensor_Msgs.Messages.Laserscan`
+    - This message is already generated in the `tutorial_common` package, because it has to be used to call the VFH algorithm.
+  - More messages for the goal, odometry, velocity commands, that you must identify with `ros2 topic info`.
+- **Notes**:
+  - Launch the TurtleBot simulation with `ros2 launch webots_ros2_turtlebot robot_launch.py`
+  - The topics of interest in this exercise are `/cmd_vel`, `/goal_pose`, `/odom`, `/scan`.
+  - There is a `rviz2` configuration tailored for this exercise in `ada4ros2/src/tutorial/turtlebot.rviz`
+    - Use `rviz2` to easily send goals to the robot in its local coordinate frame.
+
+### 4.4 Working with reference frame transformations
+
+Using laser readings directly relies on hidden information like the placement of the laser on the robot. Robust robotics do not rely on such assumptions, but utilize reference frame transformations to work with information in the appropriate reference frame. In this exercise we can take advantage of the `tf2` package to transform laser readings into their actual positions in robot coordinates. RCLAda offers at the time a bare-bones binding to the `tf2` and `tf2_ros ` packages that enables using these transformations.
+
+- **Objective**: *Create a node that waits for a goal (in local coordinates). When received, steer the TurtleBot to it while avoiding collisions using the VFH algorithm in `tutorial_common` . To improve navigation, transform the laser scan into a cloud of points using TF2 before calling the VFH.Steer function.*
+- **Main file**:  `turtlebot_VFH_TF2.adb`
+- **APIs**:
+  - `tf2_ros.gpr/RCL.TF2`
+  - `tutorial_common.gpr/VFH.Steer`
+    - Use the version that receives a cloud of points in the local frame of the robot.
+  - `rcl.gpr/RCL.QoS`
+    - See the `Profiles.Sensor_Data` profile that you will need to configure the scan subscriber.
+  - `ros2_interfaces_tutorial_common.gpr/ROSIDL.Static.Tutorial_Common.Sensor_Msgs.Messages.Laserscan`
+    - This message is already generated in the `tutorial_common` package, because it has to be used to call the VFH algorithm.
+  - More messages for the goal, odometry, velocity commands, that you must identify with `ros2 topic info`.
+- **Tools**: The package `tf2_ros` contains utilities to monitor existing transforms:
+  - `ros2 run tf2_ros tf2_monitor`
+- **Notes**:
+  - A good primer on coordinate frames can be found at https://blog.hadabot.com/ros2-navigation-tf2-tutorial-using-turtlesim.html
 
 ### Conclusion
+
+In this part we have put together our RCLAda API knowledge and a few basic robotics notions to program simple behaviors in models of real education robots.
