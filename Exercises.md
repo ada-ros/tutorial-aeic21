@@ -32,6 +32,8 @@ summarized here:
 1. Install the ROS2 packages:
     1. `sudo apt update`
     1. `sudo apt install ros-foxy-desktop python3-argcomplete`
+1. Install the `colcon` build tool:
+    1. `sudo apt install python3-colcon-ros python3-colcon-common-extensions`
 
 Our shell is unaware of ROS2 tools until we activate some ROS version. This is
 done by sourcing the `/opt/ros/<version>/setup.bash` file (a `zsh` alternative exists too):
@@ -109,11 +111,11 @@ If you experience difficulties setting up the environment, or do not have an Ubu
 A few useful packages are left out by the ros2 install desktop installation.
 
 1. Install extra packages by running:
-   1. `sudo apt install ros-foxy-rqt* ros-foxy-webots-ros2
+   1. `sudo apt install ros-foxy-rqt* ros-foxy-webots-ros2`
 2. Source the `setup.bash` script again to include these packages:
    1. `source /opt/ros/foxy/setup.bash`
 3. Install the *Webots* simulator by running (ensure you have a few GBs of free space beforehand):
-   1. ros2 launch webots_ros2_epuck robot_launch.py
+   1. `ros2 launch webots_ros2_epuck robot_launch.py`
       * You'll receive a prompt asking to install the simulator at a default location. After accepting, a large download will occur. After the installation, a simulator window should open if everything was installed correctly. You can close this window before continuing.
 
 ### Alternatives: gitpod
@@ -158,6 +160,10 @@ Afterwards, the recommendation is to launch a terminator window from the docker,
    * Note that the above command will mount your home directory inside the docker, at `/home/<your user>`. Thus, it is dangerous to run commands as root in that environment.
 
 This solution already has the ROS2 environment loaded. (No need to source the `/opt/ros/foxy/setup.bash` script.)
+
+### Alternatives: VirtualBox image
+
+An image containing all the necessary software is (or will be shortly) available at https://github.com/ada-ros/tutorial-aeic21/releases. The performance of the simulator in the VM is highly dependent on the capabilities of the host machine. It is recommended to test the suitability of this approach in advance.
 
 ## 1. Ada development environments for ROS2
 
