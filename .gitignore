@@ -1,5 +1,7 @@
 *.db
 *-loc.xml
+.clang-format
+.clangd/
 bin/
 gnatinspect*
 obj/
