@@ -1,3 +1,12 @@
+pragma Warnings (Off); -- TODO: remove this pragma
+
+--  The objective is to call another service (the one created in previous
+--  exercises, for example) with a known message type, and receive the
+--  answer in a callback.
+
+--  This requires: a Node, a callback with the appropriate message type (check
+--  Nodes.Typed_Client_Call_Proc), an instantiation using the callback.
+
 with RCL.Logging;
 with RCL.Nodes;
 
@@ -23,10 +32,15 @@ procedure Client_Async is
       Logging.Info ("Ada gossip is: " & Types.Get_String (Msg.Message));
    end Response_Listener;
 
-   procedure Caller is
-     new Nodes.Typed_Client_Call_Proc
-       (Handling => Std_Srvs.Services.Trigger.Handling,
-        Callback => Response_Listener);
+   ------------
+   -- Caller --
+   ------------
+
+   --  procedure Caller is
+   --    new Nodes.Typed_Client_Call_Proc
+   --      (Handling => ...
+   --       Callback => ...);
+   -- TODO: fix missing arguments for the instantiation
 
    Request : Std_Srvs.Services.Trigger.Handling.Request_Message;
    --  No need to initialize this message fields, as it is used just to trigger
@@ -37,10 +51,11 @@ begin
    --  delay 5.0;
 
    Logging.Info ("Ada calling...");
-   Caller (Node, "/ada_service",
-           Request,
-           Connect_Timeout => 0.0,  -- refers to service availability
-           Timeout         => 0.0); -- refers to waiting for an answer
+   --  TODO: uncomment the call with the generic we have instantiated
+   --  Caller (Node, "/ada_service",
+   --          Request,
+   --          Connect_Timeout => 0.0,  -- refers to service availability
+   --          Timeout         => 0.0); -- refers to waiting for an answer
    Logging.Info ("Call sent.");
 
    Node.Spin (During => 5.0);

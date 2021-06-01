@@ -64,19 +64,59 @@ procedure Sol_Turtlebot_VFH_TF2 is
    ----------------
 
    procedure Read_Laser (Node : in out Nodes.Node'Class;
-                         Msg  : Sensor_Msgs.Messages.Laserscan.Message;
+                         Scan : Sensor_Msgs.Messages.Laserscan.Message;
                          Info :        ROSIDL.Message_Info)
    is
       pragma Unreferenced (Node, Info);
       use Common;
+
+      ----------------------
+      -- Convert_To_Cloud --
+      ----------------------
+
+      function Convert_To_Cloud return TF2.Point_Array is
+         Cloud      : TF2.Point_Array (1 .. Natural (Scan.Ranges.Size));
+         Cloud_Last : Natural := Cloud'First - 1;
+
+         subtype Real is TF2.Real;
+         use type Real;
+         use type Types.Size_T;
+
+         Scan_Angle : Real := Real (Scan.Angle_Min);
+         Scan_I     : Types.Size_T := Scan.Ranges.Size;
+      begin
+         while Scan_I in 1 .. Scan.Ranges.Size loop
+            declare
+               use type Types.Float32;
+               Reading : Types.Float32 renames Scan.Ranges.Data (Scan_I);
+            begin
+               if Reading'Valid and Then
+                 Reading > Scan.Range_Min and then Reading < Scan.Range_Max
+               Then
+                  Cloud_Last := @ + 1;
+                  Cloud (Cloud_Last) :=
+                    (X => TF2.To_Point ((Bearing => TF2.Radians (Scan_Angle),
+                                         Distance => TF2.Real (Reading))).X,
+                     Y => TF2.To_Point ((Bearing => TF2.Radians (Scan_Angle),
+                                         Distance => TF2.Real (Reading))).Y,
+                     Z => 0.0);
+               end if;
+            end;
+            Scan_Angle := @ + Real (Scan.Angle_Increment);
+            Scan_I := @ - 1;
+         end loop;
+
+         return Cloud;
+      end Convert_To_Cloud;
+
    begin
-      Logging.Warn ("FRAME is " & Types.Get_String (Msg.Header.Frame_Id));
+      Logging.Warn ("FRAME is " & Types.Get_String (Scan.Header.Frame_Id));
       if Have_Goal and then Have_Pose then
          declare
             Cmd_Vel : constant VFH.Velocity2D := VFH.Steer
               (Odom   => Odom_Pose,
                Goal   => Goal,
-               Scan   => Msg);
+               Cloud  => Convert_To_Cloud);
          begin
             Logging.Info ("VFH command: "
                           & Fixed (Cmd_Vel.Linear)'Image & " "
