@@ -4,24 +4,21 @@ project(tutorial_exercises VERSION 0.1.0)
 find_package(rclada_common REQUIRED)
 ada_begin_package()
 
-find_package(geometry_msgs REQUIRED)
+# TODO: add necessary packages as the become necessary for the Ada exercises
 find_package(rosidl_generator_ada REQUIRED)
 find_package(rclada REQUIRED)
-find_package(rclada_tf2 REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(turtlesim REQUIRED)
 find_package(tutorial_common REQUIRED)
 
-ada_import_interfaces(
-        geometry_msgs
-        nav_msgs
-        sensor_msgs
-        turtlesim)
+# TODO: add interfaces so their messages are generated. NOTE: only one call
+# to ada_import_interfaces is possible. Pass all packages to the same call.
+#ada_import_interfaces(
+#        )
 
 ada_add_executables(
         exercises               # CMake target
         ${PROJECT_SOURCE_DIR}   # GPR is right in the root of the package
         bin
+
         client_async
         client_sync
         epuck_commander

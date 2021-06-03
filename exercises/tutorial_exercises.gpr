@@ -1,5 +1,8 @@
 with "rcl";
-with "ros2_interfaces_tutorial_exercises";
+
+--  TODO: uncomment once we have messages imported in this ROS2 package
+--  with "ros2_interfaces_tutorial_exercises";
+
 with "tutorial_common";
 with "tf2_ros";
 
