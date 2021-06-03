@@ -21,7 +21,7 @@ with RCL.Nodes;
 --  use ROSIDL.Static.Tutorial_Exercises;
 
 with ROSIDL.Types;
-with ROSIDL.Typesupport;
+--  with ROSIDL.Typesupport;
 
 use RCL;
 

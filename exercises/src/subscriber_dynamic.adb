@@ -1,3 +1,5 @@
+pragma Warnings (Off); -- TODO: remove this pragma
+
 with RCL; use RCL;
 with RCL.Logging;
 with RCL.Nodes;
@@ -10,8 +12,10 @@ procedure Subscriber_Dynamic is
    Node : Nodes.Node := Nodes.Init;
 
    Msg_Type : constant ROSIDL.Typesupport.Message_Support :=
-                ROSIDL.Typesupport.Get_Message_Support ("std_msgs",
-                                                        "String");
+                ROSIDL.Typesupport.Get_Message_Support
+                  (Pkg => "",
+                   Msg => "");
+   --  TODO: fix the Pkg and Msg parameters to import the std_msgs/String type
 
    ------------
    -- Listen --
@@ -27,9 +31,10 @@ procedure Subscriber_Dynamic is
    end Listen;
 
 begin
-   Node.Subscribe (Msg_Type => Msg_Type,
-                   Topic    => "/chatter",
-                   Callback => Listen'Unrestricted_Access);
+   --  TODO: complete the subscription parameters and uncomment
+   --  Node.Subscribe (Msg_Type => ...,
+   --                  Topic    => "/chatter",
+   --                  Callback => ...);
 
    Node.Spin (During => Forever);
 end Subscriber_Dynamic;

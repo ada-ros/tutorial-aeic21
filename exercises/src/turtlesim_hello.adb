@@ -1,21 +1,29 @@
+pragma Warnings (Off); -- TODO: remove this pragma
+
+--  In this exercise, we use the turtle to draw some concrete thing. Check the
+--  solution in sol_turtlesim_hello.adb for an example. Here, everything is
+--  working except the sequence of commands to give, that is empty.
+
 with Ada.Calendar; use Ada.Calendar;
 
 with RCL.Logging;
 with RCL.Nodes;
 with RCL.Utils;
 
-with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist;
-with ROSIDL.Types;
+--  TODO: import geometry_msgs interfaces in
+--  CMakeLists.txt, and uncomment after a colcon build:
+--  with ROSIDL.Static.Tutorial_Exercises.Geometry_Msgs.Messages.Twist;
+--  use ROSIDL.Static.Tutorial_Exercises;
 
 procedure Turtlesim_Hello is
 
    use RCL;
-   use ROSIDL.Static.Tutorial_Exercises;
-   use all type ROSIDL.Types.Float64;
+   use all type Types.Float64;
 
-   MsgDraw,
-   MsgLin,
-   MsgRot : Geometry_Msgs.Messages.Twist.Handling.Message;
+   --  TODO: uncomment once the "with" is uncommented
+   --  MsgDraw,
+   --  MsgLin,
+   --  MsgRot : Geometry_Msgs.Messages.Twist.Handling.Message;
 
    Node : Nodes.Node'Class := Nodes.Init   (Utils.Command_Name);
 
@@ -23,10 +31,11 @@ begin
    Logging.Info ("Turtlesim Hello starting...");
 
    declare
-      package Pub is new Nodes.Typed_Publish
-        (Handling => Geometry_Msgs.Messages.Twist.Handling,
-         Node     => Node,
-         Topic    => "/turtle1/cmd_vel");
+      --  TODO: uncomment once the package Handling is available
+      --  package Pub is new Nodes.Typed_Publish
+      --    (Handling => Geometry_Msgs.Messages.Twist.Handling,
+      --     Node     => Node,
+      --     Topic    => "/turtle1/cmd_vel");
 
       Next   : Time    := Clock;
       Rotate : Boolean := False;
@@ -38,36 +47,23 @@ begin
 
       procedure Draw is
          type Twist is record
-            Vlin, Vang : ROSIDL.Types.Float64;
-            Period     : Duration;
+            Vlin, Vang : Types.Float64;
+            Period     : Duration; -- NOTE: unused in the current implementation
          end record;
          Twists : constant array (Positive range <>) of Twist :=
-                    ((0.0, 0.0, 1.0),
-                     (0.0, 0.0, 1.0), -- Warm-up
-                     (0.0, 1.11, 1.0),
-                     (2.24, 0.0, 1.0), -- Half A
-                     (0.0, -2.22, 1.0),
-                     (2.24, 0.0, 1.0), -- Half A
-                     (0.0, 1.11, 1.0), (0.0, 1.57, 1.0),
-                     (2.0, 0.0, 1.0),  -- Half D
-                     (0.0, -1.57, 1.0),
-                     (1.57, -1.57, 1.0), -- Half D
-                     (1.57, -1.57, 1.0), -- Half D
-                     (0.0, 3.1416, 1.0),
-                     (1.0, 0.0, 1.0), -- Base
-                     (0.0, 1.11, 1.0),
-                     (2.24, 0.0, 1.0), -- Half A
-                     (0.0, -2.22, 1.0),
-                     (2.24, 0.0, 1.0), -- Half A
-                     (0.0, -2.22, 1.0),
-                     (6.66, 0.0, 1.0)); -- Bye
+                    ((0.0, 0.0, 1.0), -- Warm-up so topics are discovered
+                     (0.0, 0.0, 1.0), -- Warm-up so topics are discovered
+                     --  TODO: add elements to this sequence to do your drawing
+                     (0.0, 0.0, 0.0)
+                    );
          Count : Natural := 0;
       begin
          for T of Twists loop
             Count := Count + 1;
-            MsgDraw.Data.Linear.X  := T.Vlin;
-            MsgDraw.Data.Angular.Z := T.Vang;
-            Pub.Publish (MsgDraw);
+            --  TODO: uncoment once the message declarations are available
+            --  MsgDraw.Data.Linear.X  := T.Vlin;
+            --  MsgDraw.Data.Angular.Z := T.Vang;
+            --  Pub.Publish (MsgDraw);
             Logging.Info ("Sent default command" & Count'Img);
             delay T.Period;
          end loop;
@@ -76,23 +72,22 @@ begin
    begin
       Draw;
 
-      --  Continue with the star
+      --  Continue drawing the star
 
-      MsgLin.Data.Linear.X  := 3.0;
-      MsgRot.Data.Angular.Z := 2.0;
+      --  TODO: uncomment once message declarations are available
+      --  MsgLin.Data.Linear.X  := 3.0;
+      --  MsgRot.Data.Angular.Z := 2.0;
 
       loop
          if Next < Clock then
             Count := Count + 1;
-            MsgRot.Data.Angular.X := ROSIDL.Types.Float64 (Count);
-            --  This is not used for movement, but is informative when echoing
-            --  the topic for inspection.
 
-            if Rotate then
-               Pub.Publish (MsgRot);
-            else
-               Pub.Publish (MsgLin);
-            end if;
+            --  TODO: uncomment once msg declarations are available
+            --  if Rotate then
+            --     Pub.Publish (MsgRot);
+            --  else
+            --     Pub.Publish (MsgLin);
+            --  end if;
 
             Rotate := not Rotate;
 

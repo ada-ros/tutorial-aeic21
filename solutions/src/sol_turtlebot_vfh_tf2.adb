@@ -80,30 +80,46 @@ procedure Sol_Turtlebot_VFH_TF2 is
 
          subtype Real is TF2.Real;
          use type Real;
-         use type Types.Size_T;
 
          Scan_Angle : Real := Real (Scan.Angle_Min);
-         Scan_I     : Types.Size_T := Scan.Ranges.Size;
+
+         --  Reference frames to use: from the laser one to the odometry one
+         From       : constant String := Types.Get_String (Scan.Header.Frame_Id);
+         Into       : constant String := "odom";
       begin
-         while Scan_I in 1 .. Scan.Ranges.Size loop
+         for Scan_I in 1 .. Scan.Ranges.Size loop
             declare
                use type Types.Float32;
-               Reading : Types.Float32 renames Scan.Ranges.Data (Scan_I);
+               Reading     : Types.Float32 renames Scan.Ranges.Data (Scan_I);
+
+               --  We use this point to convert the laser polar reading into
+               --  a cartesian 3D point. Then, we will transform this point
+               --  to the odometry reference frame.
+               Point : TF2.Point3D;
             begin
                if Reading'Valid and Then
                  Reading > Scan.Range_Min and then Reading < Scan.Range_Max
                Then
-                  Cloud_Last := @ + 1;
-                  Cloud (Cloud_Last) :=
+                  Cloud_Last := @ + 1; -- One more cloud point to store
+
+                  --  Get the cartesian coordinates in the laser ref. frame
+                  Point :=
                     (X => TF2.To_Point ((Bearing => TF2.Radians (Scan_Angle),
                                          Distance => TF2.Real (Reading))).X,
                      Y => TF2.To_Point ((Bearing => TF2.Radians (Scan_Angle),
                                          Distance => TF2.Real (Reading))).Y,
                      Z => 0.0);
+
+                  --  Now transform the point to the odometry frame
+                  Point := TF2.Transform (Point,
+                                          Into => Into,
+                                          From => From);
+
+                  --  And assign it to the cloud array:
+                  Cloud (Cloud_Last) := Point;
                end if;
             end;
             Scan_Angle := @ + Real (Scan.Angle_Increment);
-            Scan_I := @ - 1;
          end loop;
 
          return Cloud;
@@ -176,39 +192,5 @@ begin
    Subscribe_To_Odom (Node, "/odom");
    Logging.Info ("Ready to see the world.");
 
-   loop
-      Node.Spin (During => 1.0);
-      declare
-         From : constant String := "LDS-01_rotated";
-         Into : constant String := "base_link";
-      begin
-         declare
-            Point1 : constant TF2.Point3D :=
-                       TF2.Transform ((1.0, 0.0, 0.0),
-                                      Into => Into,
-                                      From => From);
-            Point2 : constant TF2.Point3D :=
-                       TF2.Transform ((1.0, 1.0, 0.0),
-                                      Into => Into,
-                                      From => From);
-            Point3 : constant TF2.Point3D :=
-                       TF2.Transform ((0.0, 1.0, 0.0),
-                                      Into => Into,
-                                      From => From);
-         begin
-            Logging.Warn ("TF1 "
-                          & From & " --> " & Into & ": "
-                          & TF2.Image (Point1));
-            Logging.Warn ("TF2 "
-                          & From & " --> " & Into & ": "
-                          & TF2.Image (Point2));
-            Logging.Warn ("TF3 "
-                          & From & " --> " & Into & ": "
-                          & TF2.Image (Point3));
-         end;
-      exception
-         when others =>
-            Logging.Warn ("Cant transform " & From & " --> " & Into);
-      end;
-   end loop;
+   Node.Spin (During => Forever);
 end Sol_Turtlebot_VFH_TF2;

@@ -1,10 +1,19 @@
+pragma Warnings (Off); -- TODO: remove this pragma
+
+--  This exercise is a node that publishes once per second a string, using
+--  the std_msgs/String predefined message. This message has a single field,
+--  "data", of type String. We need to create a node, a publisher, and
+--  a message of the std_msgs/String type. The publisher must publish in
+--  the /chatter topic for it to be interoperable with other ROS2 standard
+--  examples, but it can be anything else for your experiments.
+
 with RCL.Logging;
 with RCL.Nodes;
 
-with ROSIDL.Dynamic;
-with ROSIDL.Static.Rclada.Std_Msgs.Messages.String;
-with ROSIDL.Types;
-with ROSIDL.Typesupport;
+with ROSIDL.Static.Rclada;
+--  TODO: import the spec for the std_msgs/String type. This message is already
+--  available as part of the Rclada imported interfaces:
+--  with ROSIDL.Static.Rclada. ...
 
 use RCL;
 use ROSIDL.Static.Rclada;
@@ -13,30 +22,30 @@ procedure Publisher_Static is
 
    Node : Nodes.Node'Class := Nodes.Init;
 
-   Msg : Std_Msgs.Messages.String.Handling.Message;
-   --  Note how the message is already typed
+   --  TODO: declare a message of the appropriate type (an Ada RAII type)
+   --  Msg : Std_Msgs.Messages.String.Handling. ...;
 
-   package Pub is new Nodes.Typed_Publish
-      (Handling => Std_Msgs.Messages.String.Handling,
-       Node     => Node,
-       Topic => "/chatter");
-   --  This generic automatically creates the subscription
+   --  TODO: complete the instantiation with the Handling package of the
+   --  message being published.
+   --  package Pub is new Nodes.Typed_Publish
+   --     (Handling => ...,
+   --      Node     => Node,
+   --      Topic => "/chatter");
+   --  This generic automatically creates the subscription, so it is
+   --  immediately usable.
 
 begin
    for Count in Positive'Range loop
-      --  To use a typed message as if it were untyped, we can do:
-      --  Msg.Dynamic.Field ("data").Set_String ("XWZ");
 
-      --  This is the typed way of doing it:
-      ROSIDL.Types.Set_String (Msg.Data.Data,
-                               "Hello from the Ada side" & Count'Image);
+      --  TODO: fill the "data" field of the message with a string.
+      --  Types.Set_String (Msg. ...,
+      --                    "Hello from the Ada side" & Count'Image);
 
-      Pub.Publish (Msg);
-      Logging.Info ("I just said: "
-                    & ROSIDL.Types.Get_String (Msg.Data.Data));
+      --  TODO: uncomment once the message declaration is fixed
+      --  Pub.Publish (Msg);
 
-      --  We don't actually need to spin on a node just to publish:
-      --  Node.Spin (During => 1.0);
+      --  TODO: uncomment once the message declaration is fixed
+      --  Logging.Info ("I just said: " & Types.Get_String (Msg.Data.Data));
 
       delay 1.0;
    end loop;
