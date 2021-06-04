@@ -7,6 +7,7 @@ ada_begin_package()
 # TODO: add necessary packages as the become necessary for the Ada exercises
 find_package(rosidl_generator_ada REQUIRED)
 find_package(rclada REQUIRED)
+find_package(rclada_tf2 REQUIRED)
 find_package(tutorial_common REQUIRED)
 
 # TODO: add interfaces so their messages are generated. NOTE: only one call
