@@ -14,14 +14,16 @@ Firstly, we will set up a plain ROS2 environment. With this, we would be ready
 to develop ROS2 packages in C, C++ or Python. Subsequently, we will set up the
 Ada-specific environment.
 
-This tutorial has been designed to be carried out on Ubuntu 20.04 LTS.
+This tutorial has been designed to be carried out on Ubuntu 20.04 LTS. See
+the *Alternatives* section for some other options and their limitations.
 
 ### 0.1 ROS2 setup
 
 The simplest way of setting up ROS2 in Ubuntu is from binary packages. Follow
 the instructions at
 https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html, which are
-summarized here:
+summarized here (**don't forget to install *colcon* at step 5 -- this is not made
+explicit in the ROS2 website**):
 
 1. Ensure your system locale supports UTF-8 (`locale` command).
 1. Install pre-requisite packages:
@@ -126,7 +128,7 @@ The gitpod service is free for open source projects, but it requires an account 
 
 Launch the prepared gitpod environment by following this link:
 
-> https://gitpod.io/#https://github.com/ada-ros/ada4ros2/tree/feat/tut-21
+> https://gitpod.io/#https://github.com/ada-ros/ada4ros2/tree/aeic21
 
 An error in the terminal of VSCode like this:
 
@@ -161,9 +163,18 @@ Afterwards, the recommendation is to launch a terminator window from the docker,
 
 This solution already has the ROS2 environment loaded. (No need to source the `/opt/ros/foxy/setup.bash` script.)
 
-### Alternatives: VirtualBox image
+### Alternatives: Virtual machine image
 
-An image containing all the necessary software is (or will be shortly) available at https://github.com/ada-ros/tutorial-aeic21/releases. The performance of the simulator in the VM is highly dependent on the capabilities of the host machine. It is recommended to test the suitability of this approach in advance.
+An OVA image containing all the necessary software is available at https://github.com/ada-ros/tutorial-aeic21/releases. The performance of the simulator in the VM is highly dependent on the capabilities of the host machine. It is recommended to test the suitability of this approach in advance.
+
+The Webots simulator requires OpenGL 3.1. This means that:
+
+* Webots will not work in VirtualBox, even with hardware acceleration. Turtlesim will work though.
+* Webots will work in VMWare Player, with varying performance depending on you hardware.
+
+### Conclusion
+
+After completing this section, you are ready to begin developing with Ada for ROS2.
 
 ## 1. Ada development environments for ROS2
 
