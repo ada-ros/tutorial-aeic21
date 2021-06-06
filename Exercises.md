@@ -113,7 +113,7 @@ If you experience difficulties setting up the environment, or do not have an Ubu
 A few useful packages are left out by the ros2 install desktop installation.
 
 1. Install extra packages by running:
-   1. `sudo apt install ros-foxy-rqt* ros-foxy-webots-ros2`
+   1. `sudo apt install ~nros-foxy-rqt* ros-foxy-webots-ros2`
 2. Source the `setup.bash` script again to include these packages:
    1. `source /opt/ros/foxy/setup.bash`
 3. Install the *Webots* simulator by running (ensure you have a few GBs of free space beforehand):
