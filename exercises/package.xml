@@ -9,7 +9,6 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>geometry_msgs</depend>
   <depend>rclada_common</depend>
   <depend>rosidl_generator_ada</depend>
   <depend>rclada</depend>

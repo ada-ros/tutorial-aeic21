@@ -2,8 +2,6 @@ with RCL.Logging;
 with RCL.Nodes;
 
 with ROSIDL.Static.Rclada.Std_Msgs.Messages.String;
-with ROSIDL.Types;
-with ROSIDL.Typesupport;
 
 use RCL;
 use ROSIDL.Static.Rclada;
@@ -22,15 +20,18 @@ procedure Sol_Subscriber_Static is
    is
       pragma Unreferenced (Node, Info);
    begin
-      Logging.Info ("Radio chatter: " & ROSIDL.Types.Get_String (Msg.Data));
+      Logging.Info ("Radio chatter: " & Types.Get_String (Msg.Data));
    end Callback;
 
-   Procedure Subscribe is new Nodes.Typed_Subscribe
+   ---------------
+   -- Subscribe --
+   ---------------
+
+   procedure Subscribe is new Nodes.Typed_Subscribe
      (Handling => Std_Msgs.Messages.String.Handling,
       Callback => Callback);
 
 begin
    Subscribe (Node, "/chatter");
-
    Node.Spin (During => Forever);
 end Sol_Subscriber_Static;
